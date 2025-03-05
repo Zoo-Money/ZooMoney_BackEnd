@@ -23,7 +23,7 @@ public class QuizEntity {
 
     @ManyToOne
     @JoinColumn(name = "child_num")
-    private ChildEntity child_num;
+    private ChildEntity child;
 
     private boolean quiz_check;
     private Date quiz_date;
