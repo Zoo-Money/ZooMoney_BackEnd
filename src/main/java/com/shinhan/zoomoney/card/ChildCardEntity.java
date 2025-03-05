@@ -19,7 +19,7 @@ public class ChildCardEntity {
 
     @ManyToOne
     @JoinColumn(name = "child_num")
-    private ChildEntity child_num;
+    private ChildEntity Child;
 
     private String card_metadata;
     private int card_money;

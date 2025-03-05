@@ -25,15 +25,15 @@ public class UseHistoryEntity {
 
     @ManyToOne
     @JoinColumn(name = "card_num")
-    private ChildCardEntity child_card;
+    private ChildCardEntity child;
 
     @ManyToOne
     @JoinColumn(name = "category_num")
-    private CategoryEntity category_num;
+    private CategoryEntity category;
 
     @ManyToOne
     @JoinColumn(name = "account_num")
-    private AccountEntity account_num;
+    private AccountEntity account;
 
     private int usehist_money;
     private String usehist_shop;
