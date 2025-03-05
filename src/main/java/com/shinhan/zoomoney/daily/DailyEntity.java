@@ -21,7 +21,7 @@ public class DailyEntity {
 
     @ManyToOne
     @JoinColumn(name = "child_num")
-    private ChildEntity child_num;
+    private ChildEntity child;
 
     private boolean daily_check;
     private java.sql.Date daily_date;

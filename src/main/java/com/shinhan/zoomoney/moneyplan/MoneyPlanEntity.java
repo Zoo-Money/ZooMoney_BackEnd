@@ -22,7 +22,7 @@ public class MoneyPlanEntity {
 
     @ManyToOne
     @JoinColumn(name = "child_num")
-    private ChildEntity child_num;
+    private ChildEntity child;
 
     private Date plan_date;
     private int plan_money;

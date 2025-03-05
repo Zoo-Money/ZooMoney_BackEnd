@@ -23,7 +23,7 @@ public class ContractEntity {
 
     @ManyToOne
     @JoinColumn(name = "child_num")
-    private ChildEntity child_num;
+    private ChildEntity child;
 
     private int contract_money;
     private Date contract_date;
