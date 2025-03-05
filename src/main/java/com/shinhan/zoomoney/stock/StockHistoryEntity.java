@@ -23,11 +23,11 @@ public class StockHistoryEntity {
 
     @ManyToOne
     @JoinColumn(name = "child_num")
-    private ChildEntity child_num;
+    private ChildEntity child;
 
     @ManyToOne
     @JoinColumn(name = "stock_num")
-    private StockEntity stock_num;
+    private StockEntity stock;
 
     private String stockhist_type;
     private int stockhist_amount;

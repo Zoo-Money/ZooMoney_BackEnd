@@ -18,15 +18,15 @@ import java.sql.Timestamp;
 public class NotifyEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int notifyNum;
+    private int notify_num;
 
     @ManyToOne
     @JoinColumn(name = "child_num")
-    private ChildEntity child_num;
+    private ChildEntity child;
 
     @ManyToOne
     @JoinColumn(name = "parent_num")
-    private ParentEntity parent_num;
+    private ParentEntity parent;
 
     private String notify_content;
     private String notify_url;
