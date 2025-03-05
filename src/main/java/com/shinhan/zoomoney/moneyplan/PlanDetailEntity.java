@@ -20,11 +20,11 @@ public class PlanDetailEntity {
 
     @ManyToOne
     @JoinColumn(name = "plan_num")
-    private MoneyPlanEntity plan_num;
+    private MoneyPlanEntity moneyplan;
 
     @ManyToOne
     @JoinColumn(name = "category_num")
-    private CategoryEntity category_num;
+    private CategoryEntity category;
 
     private int detail_money;
 }

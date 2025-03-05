@@ -20,7 +20,7 @@ public class ChildEntity {
 
     @ManyToOne
     @JoinColumn(name = "parent_num")
-    private ParentEntity parent_num;
+    private ParentEntity parent;
 
     private String child_id;
     private String child_pw;

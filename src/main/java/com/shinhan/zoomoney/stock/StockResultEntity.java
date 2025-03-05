@@ -22,7 +22,7 @@ public class StockResultEntity {
 
     @ManyToOne
     @JoinColumn(name = "child_num")
-    private ChildEntity child_num;
+    private ChildEntity child;
 
     private Date result_date;
     private double result_rate;
