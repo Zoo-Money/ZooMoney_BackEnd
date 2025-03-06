@@ -16,9 +16,9 @@ public class StockEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int stock_num;
+    private int stockNum;
 
-    private String stock_name;
-    private String stock_id;
-    private String stock_info;
+    private String stockName;
+    private String stockId;
+    private String stockInfo;
 }

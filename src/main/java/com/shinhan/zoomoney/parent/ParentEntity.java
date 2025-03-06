@@ -16,11 +16,11 @@ public class ParentEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int parent_num;
+    private int parentNum;
 
-    private String parent_id;
-    private String parent_pw;
-    private String parent_name;
-    private String parent_phone;
-    private String parent_account;
+    private String parentId;
+    private String parentPw;
+    private String parentName;
+    private String parentPhone;
+    private String parentAccount;
 }

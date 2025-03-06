@@ -15,12 +15,12 @@ import lombok.NoArgsConstructor;
 @Table(name="ChildCard")
 public class ChildCardEntity {
     @Id
-    private String card_num;
+    private String cardNum;
 
     @ManyToOne
     @JoinColumn(name = "child_num")
     private ChildEntity child;
 
-    private String card_metadata;
-    private int card_money;
+    private String cardMetadata;
+    private int cardMoney;
 }

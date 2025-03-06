@@ -1,5 +1,6 @@
-package com.shinhan.zoomoney.child;
+package com.shinhan.zoomoney.notify;
 
+import com.shinhan.zoomoney.child.ChildEntity;
 import com.shinhan.zoomoney.parent.ParentEntity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -18,7 +19,7 @@ import java.sql.Timestamp;
 public class NotifyEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int notify_num;
+    private int notifyNum;
 
     @ManyToOne
     @JoinColumn(name = "child_num")
@@ -28,8 +29,8 @@ public class NotifyEntity {
     @JoinColumn(name = "parent_num")
     private ParentEntity parent;
 
-    private String notify_content;
-    private String notify_url;
-    private Timestamp notify_time;
-    private boolean notify_check;
+    private String notifyContent;
+    private String notifyUrl;
+    private Timestamp notifyTime;
+    private boolean notifyCheck;
 }
