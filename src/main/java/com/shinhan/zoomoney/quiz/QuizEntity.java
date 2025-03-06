@@ -1,5 +1,7 @@
 package com.shinhan.zoomoney.quiz;
 
+import java.util.Date;
+
 import com.shinhan.zoomoney.child.ChildEntity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -7,7 +9,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.sql.Date;
+
 
 
 @Data
@@ -19,12 +21,12 @@ import java.sql.Date;
 public class QuizEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int quiz_num;
+    private int quizNum;
 
     @ManyToOne
     @JoinColumn(name = "child_num")
     private ChildEntity child;
 
-    private boolean quiz_check;
-    private Date quiz_date;
+    private boolean quizCheck;
+    private Date quizDate;
 }
