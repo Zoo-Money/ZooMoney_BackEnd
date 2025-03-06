@@ -1,4 +1,4 @@
-package com.shinhan.zoomoney.child;
+package com.shinhan.zoomoney.notify;
 
 import lombok.*;
 

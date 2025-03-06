@@ -1,5 +1,6 @@
-package com.shinhan.zoomoney.child;
+package com.shinhan.zoomoney.notify;
 
+import com.shinhan.zoomoney.child.ChildEntity;
 import com.shinhan.zoomoney.parent.ParentEntity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
