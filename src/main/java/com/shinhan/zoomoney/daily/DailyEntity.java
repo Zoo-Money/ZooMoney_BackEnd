@@ -1,5 +1,7 @@
 package com.shinhan.zoomoney.daily;
 
+import java.util.Date;
+
 import com.shinhan.zoomoney.child.ChildEntity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -17,12 +19,12 @@ public class DailyEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int daily_num;
+    private int dailyNum;
 
     @ManyToOne
     @JoinColumn(name = "child_num")
     private ChildEntity child;
 
-    private boolean daily_check;
-    private java.sql.Date daily_date;
+    private boolean dailyCheck;
+    private Date dailyDate;
 }
