@@ -16,17 +16,17 @@ import lombok.NoArgsConstructor;
 public class ChildEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int child_num;
+    private int childNum;
 
     @ManyToOne
     @JoinColumn(name = "parent_num")
     private ParentEntity parent;
 
-    private String child_id;
-    private String child_pw;
-    private String child_name;
-    private String child_phone;
-    private int child_point;
+    private String childId;
+    private String childPw;
+    private String childName;
+    private String childPhone;
+    private int childPoint;
 
 
 

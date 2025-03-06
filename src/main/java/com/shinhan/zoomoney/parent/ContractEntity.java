@@ -1,5 +1,7 @@
 package com.shinhan.zoomoney.parent;
 
+import java.util.Date;
+
 import com.shinhan.zoomoney.child.ChildEntity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -7,7 +9,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.sql.Date;
+
 
 @Data
 @AllArgsConstructor
@@ -19,18 +21,18 @@ public class ContractEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int contract_num;
+    private int contractNum;
 
     @ManyToOne
     @JoinColumn(name = "child_num")
     private ChildEntity child;
 
-    private int contract_money;
-    private Date contract_date;
-    private boolean contract_status;
-    private Date contract_provide;
-    private String contract_content;
-    private String contract_filepath;
-    private String contract_imgpath;
-    private String contract_excelpath;
+    private int contractMoney;
+    private Date contractDate;
+    private boolean contractStatus;
+    private Date contractProvide;
+    private String contractContent;
+    private String contractFilepath;
+    private String contractImgpath;
+    private String contractExcelpath;
 }
