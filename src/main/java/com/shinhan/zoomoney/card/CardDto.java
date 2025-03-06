@@ -7,7 +7,7 @@ import lombok.*;
 @NoArgsConstructor
 @Builder
 @ToString
-public class ChildCardDto {
+public class CardDto {
 
     private String card_num;
     private int child_num;
