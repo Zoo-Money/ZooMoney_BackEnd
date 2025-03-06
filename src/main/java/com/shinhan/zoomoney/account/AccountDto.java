@@ -1,8 +1,12 @@
 package com.shinhan.zoomoney.account;
 
-import lombok.*;
-
 import java.sql.Date;
+
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 @Data
 @AllArgsConstructor
