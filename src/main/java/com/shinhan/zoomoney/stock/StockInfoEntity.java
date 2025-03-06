@@ -22,6 +22,6 @@ public class StockInfoEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int info_num;
 
+    private String info_title;
     private String info_content;
-
 }
