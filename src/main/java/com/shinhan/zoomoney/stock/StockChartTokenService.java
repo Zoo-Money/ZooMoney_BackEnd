@@ -2,6 +2,7 @@ package com.shinhan.zoomoney.stock;
 
 import java.io.Console;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Value;
@@ -34,7 +35,7 @@ public class StockChartTokenService {
         System.out.println("🔐 API Secret: " + appSecret);
     }
 	
-    private static final String TOKEN_URL = "https://openapi.koreainvestment.com:9443/oauth2/tokenP";
+    private static final String tokenUrl = "https://openapi.koreainvestment.com:9443/oauth2/tokenP";
     
     private String accessToken = null;
     private long tokenExpiration = 0;
@@ -59,7 +60,7 @@ public class StockChartTokenService {
         requestBody.put("appsecret", appSecret);
 
         HttpEntity<Map<String, String>> entity = new HttpEntity<>(requestBody, headers);
-        ResponseEntity<Map> response = restTemplate.exchange(TOKEN_URL, HttpMethod.POST, entity, Map.class);
+        ResponseEntity<Map> response = restTemplate.exchange(tokenUrl, HttpMethod.POST, entity, Map.class);
         
         // 토큰 만료 시간 예상
         Map<String, Object> responseBody = response.getBody();
@@ -72,4 +73,6 @@ public class StockChartTokenService {
         }
         throw new RuntimeException("Failed to fetch access token");
     }
+    
+    
 }
