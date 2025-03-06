@@ -23,7 +23,6 @@ import lombok.NoArgsConstructor;
 @Entity
 @Table(name = "Account")
 public class AccountEntity {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int account_num;
@@ -38,5 +37,4 @@ public class AccountEntity {
     private Date account_start;
     private Date account_end;
     private boolean account_status;
-
 }
