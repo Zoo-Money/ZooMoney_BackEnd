@@ -18,18 +18,18 @@ public class StockDto {
     // StockDto -> StockEntity 변환
     public static StockEntity toEntity(StockDto dto) {
     	return StockEntity.builder()
-                .stockName(dto.getStock_name())
-                .stockId(dto.getStock_id())
-                .stockInfo(dto.getStock_info())
+                .stock_name(dto.getStock_name())
+                .stock_id(dto.getStock_id())
+                .stock_info(dto.getStock_info())
                 .build();
     }
     
     // StockEntity -> StockDto 변환
     public static StockDto fromEntity(StockEntity entity) {
         return StockDto.builder()
-                .stock_name(entity.getStockName())
-                .stock_id(entity.getStockId())
-                .stock_info(entity.getStockInfo())
+                .stock_name(entity.getStock_name())
+                .stock_id(entity.getStock_id())
+                .stock_info(entity.getStock_info())
                 .build();
     }
 }
