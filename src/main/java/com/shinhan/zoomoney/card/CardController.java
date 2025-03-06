@@ -1,12 +1,17 @@
 package com.shinhan.zoomoney.card;
 
-import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
+
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/card")
-public class ChildCardController {
+public class CardController {
 
 
     //카드 생성
@@ -17,7 +22,7 @@ public class ChildCardController {
 
     //카드 등록
     @PostMapping("/insert")
-    public String CardInsert(@RequestBody ChildCardDto card) {
+    public String CardInsert(@RequestBody CardDto card) {
         return "insert ok";
     }
 
