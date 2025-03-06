@@ -9,7 +9,7 @@ import java.sql.Date;
 @NoArgsConstructor
 @Builder
 @ToString
-//저금통Dto
+// 저금통Dto
 public class AccountDto {
     private int account_num;
     private int child_num;
@@ -19,5 +19,4 @@ public class AccountDto {
     private Date account_start;
     private Date account_end;
     private boolean account_status;
-
 }

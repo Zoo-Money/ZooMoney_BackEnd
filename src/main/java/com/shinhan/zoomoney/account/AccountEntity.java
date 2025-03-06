@@ -14,7 +14,7 @@ import java.sql.Date;
 @NoArgsConstructor
 @Builder
 @Entity
-@Table(name="Account")
+@Table(name = "Account")
 public class AccountEntity {
 
     @Id
@@ -28,13 +28,8 @@ public class AccountEntity {
     private String account_name;
     private int account_goal;
     private int account_now;
-    private  Date account_start;
+    private Date account_start;
     private Date account_end;
     private boolean account_status;
 
-
-
 }
-
-
-
