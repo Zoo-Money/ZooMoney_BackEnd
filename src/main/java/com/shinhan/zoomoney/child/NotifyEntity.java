@@ -18,7 +18,7 @@ import java.sql.Timestamp;
 public class NotifyEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int notify_num;
+    private int notifyNum;
 
     @ManyToOne
     @JoinColumn(name = "child_num")
@@ -28,8 +28,8 @@ public class NotifyEntity {
     @JoinColumn(name = "parent_num")
     private ParentEntity parent;
 
-    private String notify_content;
-    private String notify_url;
-    private Timestamp notify_time;
-    private boolean notify_check;
+    private String notifyContent;
+    private String notifyUrl;
+    private Timestamp notifyTime;
+    private boolean notifyCheck;
 }

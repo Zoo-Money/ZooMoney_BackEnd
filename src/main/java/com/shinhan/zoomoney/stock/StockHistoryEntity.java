@@ -1,5 +1,7 @@
 package com.shinhan.zoomoney.stock;
 
+import java.util.Date;
+
 import com.shinhan.zoomoney.child.ChildEntity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -7,7 +9,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.sql.Date;
+
 
 @Data
 @AllArgsConstructor
@@ -19,7 +21,7 @@ public class StockHistoryEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int stockhist_num;
+    private int stockhistNum;
 
     @ManyToOne
     @JoinColumn(name = "child_num")
@@ -29,8 +31,8 @@ public class StockHistoryEntity {
     @JoinColumn(name = "stock_num")
     private StockEntity stock;
 
-    private String stockhist_type;
-    private int stockhist_amount;
-    private int stockhist_price;
-    private Date stockHist_date;
+    private String stockhistType;
+    private int stockhistAmount;
+    private int stockhistPrice;
+    private Date stockHistDate;
 }
