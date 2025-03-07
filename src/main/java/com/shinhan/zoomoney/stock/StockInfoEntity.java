@@ -1,10 +1,6 @@
 package com.shinhan.zoomoney.stock;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -23,5 +19,6 @@ public class StockInfoEntity {
     private int infoNum;
 
     private String infoTitle;
+    @Column(length=500)
     private String infoContent;
 }
