@@ -12,8 +12,11 @@ public class StockInfoService {
     @Autowired
     private StockInfoRepository stockInfoRepository;
 
-    // 제목 목록을 가져오는 메서드
     public List<StockInfoEntity> getAllTitles() {
         return stockInfoRepository.findAll();
+    }
+
+    public StockInfoEntity findByInfoNum(int infoNum) {
+        return stockInfoRepository.findByInfoNum(infoNum);
     }
 }
