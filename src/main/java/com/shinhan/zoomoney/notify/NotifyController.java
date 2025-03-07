@@ -63,14 +63,14 @@ public class NotifyController {
         notifyService.insert(notifyDTO);
 
         // SSE 연결이 존재할 경우 알림 전송
-        SseEmitter emitter = emitterMap.get(notifyDTO.getMember_num());
+        SseEmitter emitter = emitterMap.get(notifyDTO.getMemberNum());
         if (emitter != null) {
             try {
-                String data = URLEncoder.encode(notifyDTO.getNotify_content(), StandardCharsets.UTF_8.toString());
+                String data = URLEncoder.encode(notifyDTO.getNotifyContent(), StandardCharsets.UTF_8.toString());
 
                 emitter.send(SseEmitter.event().name("NOTIFY").data(data));
             } catch (IOException e) {
-                emitterMap.remove(notifyDTO.getMember_num());
+                emitterMap.remove(notifyDTO.getMemberNum());
             }
         }
     }

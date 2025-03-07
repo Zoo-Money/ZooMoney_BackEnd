@@ -14,10 +14,10 @@ import lombok.ToString;
 @Builder
 @ToString
 public class NotifyDto {
-    private int notify_num;
-    private int member_num;
-    private String notify_content;
-    private String notify_url;
-    private Timestamp notify_time;
-    private boolean notify_check;
+    private int notifyNum;
+    private int memberNum;
+    private String notifyContent;
+    private String notifyUrl;
+    private Timestamp notifyTime;
+    private boolean notifyCheck;
 }

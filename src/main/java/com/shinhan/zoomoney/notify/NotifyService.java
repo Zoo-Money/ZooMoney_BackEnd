@@ -46,7 +46,7 @@ public class NotifyService {
         NotifyEntity notifyEntity = notifyRepository.findById(notify_num).orElse(null);
         if (notifyEntity != null) {
             // 상태 변경 로직
-            notifyEntity.setNotifyCheck(true);  // 읽음으로 상태 변경
+            notifyEntity.setNotifyCheck(true); // 읽음으로 상태 변경
             notifyRepository.save(notifyEntity);
         }
     }
@@ -56,16 +56,6 @@ public class NotifyService {
     }
 
     public NotifyDto entityToDto(NotifyEntity entity) {
-        if (entity == null) return null;
-        
-        NotifyDto dto = new NotifyDto();
-        dto.setNotify_num(entity.getNotifyNum());
-        dto.setMember_num(entity.getMember().getMemberNum());
-        dto.setNotify_content(entity.getNotifyContent());
-        dto.setNotify_url(entity.getNotifyUrl());
-        dto.setNotify_time(entity.getNotifyTime());
-        dto.setNotify_check(entity.isNotifyCheck());
-        
-        return dto;
+        return modelMapper.map(entity, NotifyDto.class);
     }
 }
