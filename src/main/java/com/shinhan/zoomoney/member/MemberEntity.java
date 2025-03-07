@@ -22,8 +22,8 @@ public class MemberEntity {
     private String memberName;
     private String memberPhone;
     private String memberType;
-    private int memberParent;
-    private int memberPoint;
+    private Integer memberParent;
+    private Integer memberPoint;
     private String memberAccount;
 
 }
