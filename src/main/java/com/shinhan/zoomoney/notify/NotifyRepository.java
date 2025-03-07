@@ -1,27 +1,18 @@
 package com.shinhan.zoomoney.notify;
 
 import java.util.List;
-
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.stereotype.Repository;
 
+@Repository
 public interface NotifyRepository extends JpaRepository<NotifyEntity, Integer> {
-    public List<NotifyDto> select(int member_num) {
-        throw new UnsupportedOperationException("Unimplemented method 'select'");
-    }
 
-    public NotifyDto selectById(int notify_num) {
-        throw new UnsupportedOperationException("Unimplemented method 'selectById'");
-    }
+    // 멤버 번호로 알림 조회
+    @Query("SELECT n FROM NotifyEntity n WHERE n.member_num = :member_num")
+    List<NotifyEntity> findAllByMemberNum(int member_num);
 
-    public int selectUnread(int member_num) {
-        throw new UnsupportedOperationException("Unimplemented method 'selectUnread'");
-    }
-
-    public void insert(NotifyDto nofityDTO) {
-        throw new UnsupportedOperationException("Unimplemented method 'insert'");
-    }
-
-    public void update(int notify_num) {
-        throw new UnsupportedOperationException("Unimplemented method 'update'");
-    }
+    // 멤버 번호로 읽지 않은 알림 개수 조회
+    @Query("SELECT COUNT(n) FROM NotifyEntity n WHERE n.member_num = :member_num AND n.read = false")
+    int countUnreadByMemberNum(int member_num);
 }
