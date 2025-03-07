@@ -11,11 +11,11 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/stock")
-public class StockChartContoroller {
+public class StockChartController {
 	
 	private final StockChartService stockChartService;
 	
-	public StockChartContoroller(StockChartService stockChartService) {
+	public StockChartController(StockChartService stockChartService) {
 		this.stockChartService = stockChartService;
 	}
 	

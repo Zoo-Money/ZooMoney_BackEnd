@@ -1,22 +1,27 @@
-package com.shinhan.zoomoney.parent;
+package com.shinhan.zoomoney.contract;
 
 import java.util.Date;
 
-import com.shinhan.zoomoney.child.ChildEntity;
-import jakarta.persistence.*;
+import com.shinhan.zoomoney.member.MemberEntity;
+
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
 @Entity
-@Table(name="Contract")
+@Table(name = "Contract")
 public class ContractEntity {
 
     @Id
@@ -24,8 +29,8 @@ public class ContractEntity {
     private int contractNum;
 
     @ManyToOne
-    @JoinColumn(name = "child_num")
-    private ChildEntity child;
+    @JoinColumn(name = "member_num")
+    private MemberEntity member;
 
     private int contractMoney;
     private Date contractDate;
