@@ -8,11 +8,10 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface NotifyRepository extends JpaRepository<NotifyEntity, Integer> {
 
-    // 알림 조회
-    @Query("SELECT n FROM NotifyEntity n WHERE n.member_num = :member_num")
-    List<NotifyEntity> findAllByMemberNum(int member_num);
+    // 멤버별 알림 목록 조회
+    List<NotifyEntity> findAllByMember_MemberNum(int memberNum);
 
     // 읽지 않은 알림 개수 조회
-    @Query("SELECT COUNT(n) FROM NotifyEntity n WHERE n.member_num = :member_num AND n.read = false")
-    int countUnreadByMemberNum(int member_num);
+    @Query("SELECT COUNT(n) FROM NotifyEntity n WHERE n.member.memberNum = :memberNum AND n.notifyCheck = false")
+    int countByUnread(int memberNum);
 }

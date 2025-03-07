@@ -18,7 +18,7 @@ public class NotifyService {
 
     // 알림 조회
     public List<NotifyDto> select(int member_num) {
-        List<NotifyEntity> entityList = notifyRepository.findAllByMemberNum(member_num);
+        List<NotifyEntity> entityList = notifyRepository.findAllByMember_MemberNum(member_num);
         List<NotifyDto> dtoList = entityList.stream()
                 .map(this::entityToDto)
                 .collect(Collectors.toList());
@@ -32,7 +32,7 @@ public class NotifyService {
 
     // 읽지 않은 알림 개수 조회
     public int selectUnread(int member_num) {
-        return notifyRepository.countUnreadByMemberNum(member_num);
+        return notifyRepository.countByUnread(member_num);
     }
 
     // 알림 생성
