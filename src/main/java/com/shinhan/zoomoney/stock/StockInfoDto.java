@@ -8,6 +8,7 @@ import lombok.*;
 @Builder
 @ToString
 public class StockInfoDto {
-    private int info_num;
-    private String info_content;
+    private int infoNum;
+    private String infoTitle;
+    private String infoContent;
 }
