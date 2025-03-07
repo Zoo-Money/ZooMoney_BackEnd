@@ -25,28 +25,25 @@ public class QuizService {
         "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=AIzaSyDHayHZUvvzzIDA7gOYjIn4VIsZKQ5D9dE";
 
     public String generateFinancialQuiz() {
-        // ✅ 1️⃣ 랜덤 키워드 2개 가져오기
-        List<KeywordEntity> keywords = keywordRepository.findRandomKeywords();
+        // ✅ 랜덤 키워드 2개 가져오기
+        List<String> keywords = keywordRepository.findRandomKeywordWords();
         if (keywords.size() < 2) {
             return "키워드가 부족합니다.";
         }
 
-        String keyword1 = keywords.get(0).getKeywordWord();
-        String keyword2 = keywords.get(1).getKeywordWord();
+        String keyword1 = keywords.get(0);
+        String keyword2 = keywords.get(1);
         
-        // ✅ 2️⃣ Gemini API에 보낼 프롬프트 생성
+        // ✅ Gemini API에 보낼 프롬프트 생성
         String prompt = String.format(
-            "'%s'와 '%s' 이 키워드와 관련된 새로운 금융 OX 퀴즈를 만들어줘. "
-            + "중학색 수준으로 간단히 만들어줘. "
-            + "JSON 형식으로 한국어로 응답해줘. "
-            + "예제: { 'question': '질문 내용', 'answer': 'O 또는 X', 'explanation': '정답에 대한 간단한 설명' }",
+            "'%s'와 '%s' 이 키워드와 관련된 새로운 금융 OX 퀴즈 한 문제를 만들어줘. JSON 형식으로 한국어로 응답해줘. 예제: { 'question': '질문 내용', 'answer': 'O 또는 X', 'explanation': '정답에 대한 간단한 설명' }",
             keyword1, keyword2
         );
 
-        // ✅ 3️⃣ Gemini API 호출
+        // ✅ Gemini API 호출
         String quizQuestion = callGeminiApi(prompt);
 
-        // ✅ 4️⃣ 퀴즈 저장 (child 연동 없음)
+        // ✅ 퀴즈 저장 (child 연동 없음)
         QuizEntity quiz = QuizEntity.builder()
                 .quizCheck(false)
                 .quizDate(new Date())
@@ -87,3 +84,4 @@ public class QuizService {
         }
     }
 }
+
