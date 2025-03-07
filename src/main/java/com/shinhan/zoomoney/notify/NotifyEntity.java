@@ -21,7 +21,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Builder
 @Entity
-@Table(name="Notify")
+@Table(name = "Notify")
 public class NotifyEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -30,8 +30,6 @@ public class NotifyEntity {
     @ManyToOne
     @JoinColumn(name = "member_num")
     private MemberEntity member;
-
-
 
     private String notifyContent;
     private String notifyUrl;

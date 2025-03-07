@@ -1,4 +1,4 @@
-package com.shinhan.zoomoney.parent;
+package com.shinhan.zoomoney.contract;
 
 import java.util.Date;
 
@@ -16,14 +16,12 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-
-
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
 @Entity
-@Table(name="Contract")
+@Table(name = "Contract")
 public class ContractEntity {
 
     @Id
