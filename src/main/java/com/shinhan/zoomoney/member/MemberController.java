@@ -1,6 +1,7 @@
 package com.shinhan.zoomoney.member;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -52,6 +53,10 @@ public class MemberController {
         response.put("message", "로그아웃 성공");
         return response;
     }
-	
-	
+
+    @GetMapping("/{memberNum}/select")
+	public List<MemberEntity> select(@PathVariable int memberNum) {
+        List<MemberEntity> memberInfo = memberService.selectByMemberNum(memberNum);
+        return memberInfo;
+    }
 }
