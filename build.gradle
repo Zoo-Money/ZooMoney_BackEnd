@@ -41,7 +41,7 @@ dependencies {
 	developmentOnly 'org.springframework.boot:spring-boot-devtools'
 	implementation group: 'org.modelmapper', name: 'modelmapper', version: '2.3.8'
 
-
+}
 tasks.named('test') {
 	useJUnitPlatform()
 }
