@@ -18,8 +18,11 @@ import org.jsoup.Connection;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+
+import com.querydsl.core.annotations.QueryEntity;
 
 @Service
 public class StockNewsService {
@@ -29,6 +32,14 @@ public class StockNewsService {
 	@Value("${naver.client.secret}")
 	private String clientSecret;
 
+	@Autowired
+	StockNewsRepository stockNewsRepo;
+	
+	public String getStockName(String stockName) {
+		String query = stockName + "주식";
+		StockEntity stockentity = stockNewsRepo.findByStockName(stockName);
+		return (stockentity != null) ? query : null;
+	}
 	public String searchNews(String query) {
 		String text = encodedQuery(query);
 		String apiURL = "https://openapi.naver.com/v1/search/news?query=" + text;
@@ -36,7 +47,7 @@ public class StockNewsService {
 		Map<String, String> requestHeaders = new HashMap<>();
 		requestHeaders.put("X-Naver-Client-Id", clientId);
 		requestHeaders.put("X-Naver-Client-Secret", clientSecret);
-		System.out.println(clientId + clientSecret);
+		//System.out.println(clientId + clientSecret);
 		return get(apiURL, requestHeaders);
 	}
 
@@ -44,7 +55,7 @@ public class StockNewsService {
 		try {
 			return URLEncoder.encode(query, "UTF-8");
 		} catch (UnsupportedEncodingException e) {
-			throw new RuntimeException("검색어 인코딩 실패~", e);
+			throw new RuntimeException("검색어 인코딩 실패", e);
 		}
 	}
 
@@ -66,7 +77,7 @@ public class StockNewsService {
 				return readBody(con.getErrorStream());
 			}
 		} catch (IOException e) {
-			throw new RuntimeException("API 요청과 응답 실패~", e);
+			throw new RuntimeException("API 요청과 응답 실패", e);
 		} finally {
 			con.disconnect();
 		}
@@ -97,40 +108,6 @@ public class StockNewsService {
 		} catch (IOException e) {
 			throw new RuntimeException("API 응답을 읽는데 실패했습니다.", e);
 		}
-	}
-
-	public Map<String, Object> getNewsContent(String url) {
-		String content = "";
-		List<String> images = new ArrayList<>();
-		try {
-			//우회
-			Connection connection = Jsoup.connect(url).userAgent("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.36");
-			//페이지가져오기
-			Document document = connection.get();
-			//본문내용추출
-			Element contentElement = document.select(".bodynuews").first();
-			if(contentElement != null) {
-				//본문텍스트 추출
-				content = contentElement.text();
-			}
-			//이미지추출
-			List<Element> imgElements = document.select("img");
-			for(Element img : imgElements) {
-				String imgUrl = img.absUrl("src");
-				if(!imgUrl.isEmpty()) {
-					images.add(imgUrl);
-				}
-			}
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		//크롤링된 데이터 map 으로 변환
-		Map<String, Object> response = new HashMap<>();
-		response.put("content", content);
-		response.put("images", images);
-		return response;
-		
 	}
 }
 
