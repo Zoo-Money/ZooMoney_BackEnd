@@ -1,6 +1,8 @@
 package com.shinhan.zoomoney.parent;
 
-import java.util.Date;
+
+
+import java.time.LocalDate;
 
 import com.shinhan.zoomoney.child.ChildEntity;
 import jakarta.persistence.*;
@@ -28,9 +30,9 @@ public class ContractEntity {
     private ChildEntity child;
 
     private int contractMoney;
-    private Date contractDate;
+    private LocalDate contractDate;
     private boolean contractStatus;
-    private Date contractProvide;
+    private LocalDate contractProvide;
     private String contractContent;
     private String contractFilepath;
     private String contractImgpath;
