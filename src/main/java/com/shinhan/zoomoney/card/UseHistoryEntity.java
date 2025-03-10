@@ -25,7 +25,7 @@ public class UseHistoryEntity {
 
     @ManyToOne
     @JoinColumn(name = "card_num")
-    private ChildCardEntity child;
+    private CardEntity card;
 
     @ManyToOne
     @JoinColumn(name = "category_num")

@@ -2,8 +2,15 @@ package com.shinhan.zoomoney.stock;
 
 import java.util.Date;
 
-import com.shinhan.zoomoney.child.ChildEntity;
-import jakarta.persistence.*;
+import com.shinhan.zoomoney.member.MemberEntity;
+
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -23,8 +30,8 @@ public class StockHistoryBackupEntity {
     private int stockhistNum;
 
     @ManyToOne
-    @JoinColumn(name = "child_num")
-    private ChildEntity childNum;
+    @JoinColumn(name = "member_num")
+    private MemberEntity member;
 
     @ManyToOne
     @JoinColumn(name = "stock_num")

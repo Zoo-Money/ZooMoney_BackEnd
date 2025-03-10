@@ -2,8 +2,15 @@ package com.shinhan.zoomoney.daily;
 
 import java.util.Date;
 
-import com.shinhan.zoomoney.child.ChildEntity;
-import jakarta.persistence.*;
+import com.shinhan.zoomoney.member.MemberEntity;
+
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -22,8 +29,8 @@ public class DailyEntity {
     private int dailyNum;
 
     @ManyToOne
-    @JoinColumn(name = "child_num")
-    private ChildEntity child;
+    @JoinColumn(name = "member_num")
+    private MemberEntity member;
 
     private boolean dailyCheck;
     private Date dailyDate;

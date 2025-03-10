@@ -15,7 +15,7 @@ import lombok.NoArgsConstructor;
 public class StockMoneyEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int childNum;
+    private int memberNum;
 
     private int stockmoneyTotal;
 }

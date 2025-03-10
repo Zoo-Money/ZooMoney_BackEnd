@@ -2,7 +2,8 @@ package com.shinhan.zoomoney.account;
 
 import java.util.Date;
 
-import com.shinhan.zoomoney.child.ChildEntity;
+import com.shinhan.zoomoney.member.MemberEntity;
+
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -23,8 +24,8 @@ public class AccountEntity {
     private int accountNum;
 
     @ManyToOne
-    @JoinColumn(name = "child_num")
-    private ChildEntity child;
+    @JoinColumn(name = "member_num")
+    private MemberEntity member;
 
     private String accountName;
     private int accountGoal;
