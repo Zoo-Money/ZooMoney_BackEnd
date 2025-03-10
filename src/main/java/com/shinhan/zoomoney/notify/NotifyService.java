@@ -16,7 +16,7 @@ public class NotifyService {
     @Autowired
     private ModelMapper modelMapper;
 
-    // 알림 조회
+    // 사용자의 알림 목록 조회
     public List<NotifyDto> select(int member_num) {
         List<NotifyEntity> entityList = notifyRepository.findAllByMember_MemberNum(member_num);
         List<NotifyDto> dtoList = entityList.stream()
@@ -41,20 +41,21 @@ public class NotifyService {
         notifyRepository.save(entity);
     }
 
-    // 알림 상태 변경
+    // 알림 상태(읽음 여부) 변경
     public void update(int notify_num) {
         NotifyEntity notifyEntity = notifyRepository.findById(notify_num).orElse(null);
         if (notifyEntity != null) {
-            // 상태 변경 로직
             notifyEntity.setNotifyCheck(true); // 읽음으로 상태 변경
             notifyRepository.save(notifyEntity);
         }
     }
 
+    // DTO → Entity 변환
     public NotifyEntity dtoToEntity(NotifyDto dto) {
         return modelMapper.map(dto, NotifyEntity.class);
     }
 
+    // Entity → DTO 변환
     public NotifyDto entityToDto(NotifyEntity entity) {
         return modelMapper.map(entity, NotifyDto.class);
     }
