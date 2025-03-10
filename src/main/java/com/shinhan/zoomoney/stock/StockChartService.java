@@ -24,10 +24,10 @@ public class StockChartService {
 	private final StockChartRepository stockRepository;
 	private StockChartRepository stockChartRepository;
 	
-	@Value("${api.key}")
+	@Value("${stock.api.key}")
 	private String apiKey;
 	
-	@Value("${api.secret}")
+	@Value("${stock.api.secret}")
 	private String apiSecret;
 	
 	
