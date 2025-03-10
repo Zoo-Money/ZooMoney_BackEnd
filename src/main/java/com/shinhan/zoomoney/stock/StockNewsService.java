@@ -9,11 +9,20 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLEncoder;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
+import org.jsoup.Connection;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+
+import com.querydsl.core.annotations.QueryEntity;
 
 @Service
 public class StockNewsService {
@@ -23,6 +32,14 @@ public class StockNewsService {
 	@Value("${naver.client.secret}")
 	private String clientSecret;
 
+	@Autowired
+	StockNewsRepository stockNewsRepo;
+	
+	public String getStockName(String stockName) {
+		String query = stockName + "주식";
+		StockEntity stockentity = stockNewsRepo.findByStockName(stockName);
+		return (stockentity != null) ? query : null;
+	}
 	public String searchNews(String query) {
 		String text = encodedQuery(query);
 		String apiURL = "https://openapi.naver.com/v1/search/news?query=" + text;
@@ -30,7 +47,7 @@ public class StockNewsService {
 		Map<String, String> requestHeaders = new HashMap<>();
 		requestHeaders.put("X-Naver-Client-Id", clientId);
 		requestHeaders.put("X-Naver-Client-Secret", clientSecret);
-		System.out.println(clientId + clientSecret);
+		//System.out.println(clientId + clientSecret);
 		return get(apiURL, requestHeaders);
 	}
 
@@ -38,7 +55,7 @@ public class StockNewsService {
 		try {
 			return URLEncoder.encode(query, "UTF-8");
 		} catch (UnsupportedEncodingException e) {
-			throw new RuntimeException("검색어 인코딩 실패~", e);
+			throw new RuntimeException("검색어 인코딩 실패", e);
 		}
 	}
 
@@ -60,7 +77,7 @@ public class StockNewsService {
 				return readBody(con.getErrorStream());
 			}
 		} catch (IOException e) {
-			throw new RuntimeException("API 요청과 응답 실패~", e);
+			throw new RuntimeException("API 요청과 응답 실패", e);
 		} finally {
 			con.disconnect();
 		}
@@ -92,6 +109,5 @@ public class StockNewsService {
 			throw new RuntimeException("API 응답을 읽는데 실패했습니다.", e);
 		}
 	}
-
 }
 
