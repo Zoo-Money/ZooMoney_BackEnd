@@ -9,9 +9,15 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLEncoder;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
+import org.jsoup.Connection;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -93,5 +99,38 @@ public class StockNewsService {
 		}
 	}
 
+	public Map<String, Object> getNewsContent(String url) {
+		String content = "";
+		List<String> images = new ArrayList<>();
+		try {
+			//우회
+			Connection connection = Jsoup.connect(url).userAgent("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.36");
+			//페이지가져오기
+			Document document = connection.get();
+			//본문내용추출
+			Element contentElement = document.select(".bodynuews").first();
+			if(contentElement != null) {
+				//본문텍스트 추출
+				content = contentElement.text();
+			}
+			//이미지추출
+			List<Element> imgElements = document.select("img");
+			for(Element img : imgElements) {
+				String imgUrl = img.absUrl("src");
+				if(!imgUrl.isEmpty()) {
+					images.add(imgUrl);
+				}
+			}
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		//크롤링된 데이터 map 으로 변환
+		Map<String, Object> response = new HashMap<>();
+		response.put("content", content);
+		response.put("images", images);
+		return response;
+		
+	}
 }
 
