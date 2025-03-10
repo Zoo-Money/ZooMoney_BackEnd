@@ -9,16 +9,16 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class NotifyService {
-	
+
     @Autowired
-    private NotifyRepository notifyRepository;
+    private NotifyRepository notifyRepo;
 
     @Autowired
     private ModelMapper modelMapper;
 
-    // 알림 조회
-    public List<NotifyDto> select(int member_num) {
-        List<NotifyEntity> entityList = notifyRepository.findAllByMember_MemberNum(member_num);
+    // 사용자의 알림 목록 조회
+    public List<NotifyDto> select(int memberNum) {
+        List<NotifyEntity> entityList = notifyRepo.findAllByMember_MemberNum(memberNum);
         List<NotifyDto> dtoList = entityList.stream()
                 .map(this::entityToDto)
                 .collect(Collectors.toList());
@@ -26,46 +26,38 @@ public class NotifyService {
     }
 
     // 알림 상세 조회
-    public NotifyEntity selectById(int notify_num) {
-        return notifyRepository.findById(notify_num).orElse(null);
+    public NotifyEntity selectById(int notifyNum) {
+        return notifyRepo.findById(notifyNum).orElse(null);
     }
 
     // 읽지 않은 알림 개수 조회
-    public int selectUnread(int member_num) {
-        return notifyRepository.countByUnread(member_num);
+    public int selectUnread(int memberNum) {
+        return notifyRepo.countByUnread(memberNum);
     }
 
     // 알림 생성
-    public void insert(NotifyDto notifyDTO) {
-        NotifyEntity entity = dtoToEntity(notifyDTO);
-        notifyRepository.save(entity);
+    public void insert(NotifyDto dto) {
+        NotifyEntity entity = dtoToEntity(dto);
+        notifyRepo.save(entity);
     }
 
-    // 알림 상태 변경
-    public void update(int notify_num) {
-        NotifyEntity notifyEntity = notifyRepository.findById(notify_num).orElse(null);
-        if (notifyEntity != null) {
-            // 상태 변경 로직
-            notifyEntity.setNotifyCheck(true);  // 읽음으로 상태 변경
-            notifyRepository.save(notifyEntity);
+    // 알림 상태(읽음 여부) 변경
+    public void update(int notifyNum) {
+        NotifyEntity entity = notifyRepo.findById(notifyNum).orElse(null);
+
+        if (entity != null) {
+            entity.setNotifyCheck(true); // 읽음으로 상태 변경
+            notifyRepo.save(entity);
         }
     }
 
+    // DTO → Entity 변환
     public NotifyEntity dtoToEntity(NotifyDto dto) {
         return modelMapper.map(dto, NotifyEntity.class);
     }
 
+    // Entity → DTO 변환
     public NotifyDto entityToDto(NotifyEntity entity) {
-        if (entity == null) return null;
-        
-        NotifyDto dto = new NotifyDto();
-        dto.setNotify_num(entity.getNotifyNum());
-        dto.setMember_num(entity.getMember().getMemberNum());
-        dto.setNotify_content(entity.getNotifyContent());
-        dto.setNotify_url(entity.getNotifyUrl());
-        dto.setNotify_time(entity.getNotifyTime());
-        dto.setNotify_check(entity.isNotifyCheck());
-        
-        return dto;
+        return modelMapper.map(entity, NotifyDto.class);
     }
 }
