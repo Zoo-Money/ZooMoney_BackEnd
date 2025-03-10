@@ -81,7 +81,7 @@ public class NotifyController {
     }
 
     // 읽지 않은 알림 개수 조회
-    @GetMapping("/unread/{member_num}")
+    @GetMapping("/unread/{memberNum}")
     public int selectUnread(@PathVariable int memberNum) {
         return notifyService.selectUnread(memberNum);
     }
