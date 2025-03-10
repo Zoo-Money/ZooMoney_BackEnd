@@ -16,7 +16,7 @@ public class PlanDetailEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int detail_num;
+    private int detailNum;
 
     @ManyToOne
     @JoinColumn(name = "plan_num")
@@ -26,5 +26,5 @@ public class PlanDetailEntity {
     @JoinColumn(name = "category_num")
     private CategoryEntity category;
 
-    private int detail_money;
+    private int detailMoney;
 }

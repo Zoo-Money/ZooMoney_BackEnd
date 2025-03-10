@@ -1,4 +1,4 @@
-package com.shinhan.zoomoney.parent;
+package com.shinhan.zoomoney.contract;
 
 import lombok.*;
 

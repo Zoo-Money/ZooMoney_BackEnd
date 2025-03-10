@@ -1,4 +1,4 @@
-package com.shinhan.zoomoney.stock;
+package com.shinhan.zoomoney.contract;
 
 import java.util.Date;
 
@@ -16,23 +16,28 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
 @Entity
-@Table(name="StockResult")
-public class StockResultEntity {
+@Table(name = "Contract")
+public class ContractEntity {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int resultNum;
+    private int contractNum;
 
     @ManyToOne
     @JoinColumn(name = "member_num")
     private MemberEntity member;
 
-    private Date resultDate;
-    private double resultRate;
-    private int resultRank;
+    private int contractMoney;
+    private Date contractDate;
+    private boolean contractStatus;
+    private Date contractProvide;
+    private String contractContent;
+    private String contractFilepath;
+    private String contractImgpath;
+    private String contractExcelpath;
 }

@@ -8,8 +8,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.sql.Date;
 import java.sql.Timestamp;
+import java.util.Date;
 
 @Data
 @AllArgsConstructor
@@ -21,11 +21,11 @@ public class UseHistoryEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int usehist_num;
+    private int usehistNum;
 
     @ManyToOne
     @JoinColumn(name = "card_num")
-    private ChildCardEntity child;
+    private CardEntity card;
 
     @ManyToOne
     @JoinColumn(name = "category_num")
@@ -35,9 +35,9 @@ public class UseHistoryEntity {
     @JoinColumn(name = "account_num")
     private AccountEntity account;
 
-    private int usehist_money;
-    private String usehist_shop;
-    private String usehist_type;
-    private Date usehist_date;
-    private Timestamp usehist_time;
+    private int usehistMoney;
+    private String usehistShop;
+    private String usehistType;
+    private Date usehistDate;
+    private Timestamp usehistTime;
 }
