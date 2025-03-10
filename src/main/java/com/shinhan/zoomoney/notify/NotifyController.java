@@ -16,13 +16,11 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 @RestController
 @RequestMapping("/notify")
 public class NotifyController {
-
     @Autowired
     private NotifyService notifyService;
 
@@ -31,71 +29,66 @@ public class NotifyController {
 
     private static final Long TIMEOUT = 30 * 60 * 1000L; // 30분 유지
 
-    @GetMapping("/main")
-    public ModelAndView viewMain() {
-        return new ModelAndView("notify/main");
-    }
-
     // SSE 연결 설정 (클라이언트가 알림을 구독)
-    @GetMapping(value = "/subscribe/{member_num}", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
-    public SseEmitter subscribe(@PathVariable int member_num) {
+    @GetMapping(value = "/subscribe/{memberNum}", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
+    public SseEmitter subscribe(@PathVariable int memberNum) {
         SseEmitter emitter = new SseEmitter(TIMEOUT);
-        emitterMap.put(member_num, emitter);
+        emitterMap.put(memberNum, emitter);
 
         // 클라이언트에 연결 확인 이벤트 전송
         try {
             emitter.send(SseEmitter.event().name("INIT").data(""));
         } catch (IOException e) {
-            emitterMap.remove(member_num);
+            emitterMap.remove(memberNum);
         }
 
         // 연결 종료 시, 맵에서 해당 사용자 제거
-        emitter.onCompletion(() -> emitterMap.remove(member_num));
-        emitter.onTimeout(() -> emitterMap.remove(member_num));
+        emitter.onCompletion(() -> emitterMap.remove(memberNum));
+        emitter.onTimeout(() -> emitterMap.remove(memberNum));
 
         return emitter;
     }
 
     // 새로운 알림 생성 및 SSE로 전송
     @PostMapping("/send")
-    public void sendNotification(@RequestBody NotifyDto notifyDTO) {
+    public void sendNotification(@RequestBody NotifyDto dto) {
         // 알림 생성
-        notifyService.insert(notifyDTO);
+        notifyService.insert(dto);
 
         // SSE 연결이 존재할 경우 알림 전송
-        SseEmitter emitter = emitterMap.get(notifyDTO.getMemberNum());
+        SseEmitter emitter = emitterMap.get(dto.getMemberNum());
         if (emitter != null) {
             try {
-                String data = URLEncoder.encode(notifyDTO.getNotifyContent(), StandardCharsets.UTF_8.toString());
+                String data = URLEncoder.encode(dto.getNotifyContent(), StandardCharsets.UTF_8.toString());
 
                 emitter.send(SseEmitter.event().name("NOTIFY").data(data));
             } catch (IOException e) {
-                emitterMap.remove(notifyDTO.getMemberNum());
+                emitterMap.remove(dto.getMemberNum());
             }
         }
     }
 
     // 사용자의 알림 목록 조회
-    @GetMapping("/list/{member_num}")
-    public List<NotifyDto> select(@PathVariable int member_num) {
-        return notifyService.select(member_num);
+    @GetMapping("/list/{memberNum}")
+    public List<NotifyDto> select(@PathVariable int memberNum) {
+        return notifyService.select(memberNum);
     }
 
     // 알림 상세 조회
-    @PostMapping("/select/{notify_num}")
-    public NotifyDto selectById(@PathVariable int notify_num) {
-        return notifyService.entityToDto(notifyService.selectById(notify_num));
+    @PostMapping("/select/{notifyNum}")
+    public NotifyDto selectById(@PathVariable int notifyNum) {
+        return notifyService.entityToDto(notifyService.selectById(notifyNum));
     }
 
     // 읽지 않은 알림 개수 조회
     @GetMapping("/unread/{member_num}")
-    public int selectUnread(@PathVariable int member_num) {
-        return notifyService.selectUnread(member_num);
+    public int selectUnread(@PathVariable int memberNum) {
+        return notifyService.selectUnread(memberNum);
     }
 
     // 알림 상태(읽음 여부) 변경
-    @PutMapping("/check/{notify_num}")
-    public void update(@PathVariable int notify_num) {
-        notifyService.update(notify_num);
+    @PutMapping("/check/{notifyNum}")
+    public void update(@PathVariable int notifyNum) {
+        notifyService.update(notifyNum);
     }
 }
