@@ -22,7 +22,6 @@ public class StockChartService {
 	private final RestTemplate restTemplate = new RestTemplate();
 	private final StockChartTokenService tokenService;
 	private final StockChartRepository stockRepository;
-	private StockChartRepository stockChartRepository;
 	
 	@Value("${stock.api.key}")
 	private String apiKey;
@@ -108,5 +107,11 @@ public class StockChartService {
         stockRepository.saveAll(stockEntities); // DB에 저장
     }
     
+    // DB에서 저장된 주식 데이터 "StockDto"로 변환하여 반환
+    public List<StockDto> getStockList(){
+    	return stockRepository.findAll().stream()
+    			.map(StockDto::fromEntity)
+    			.collect(Collectors.toList());
+    }
     
 }

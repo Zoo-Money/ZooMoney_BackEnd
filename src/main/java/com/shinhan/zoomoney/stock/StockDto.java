@@ -35,12 +35,5 @@ public class StockDto {
                 .build();
     }
     
-    // API 응답을 StockDTO로 변환
-    public static StockDto fromApiResponse(Map<String, Object> apiResponse) {
-        return StockDto.builder()
-                .stock_name((String) apiResponse.get("hts_kor_isnm"))  // API 필드를 stock_name으로 변환
-                .stock_id((String) apiResponse.get("mksc_shrn_iscd"))
-                .stock_info(null)
-                .build();
-    }
+    
 }
