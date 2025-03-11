@@ -22,10 +22,10 @@ public class StockChartTokenService {
 	
 	private final RestTemplate restTemplate = new RestTemplate();
 	
-	@Value("${api.key}")
+	@Value("${stock.api.key}")
     private String appKey;
 
-    @Value("${api.secret}")
+    @Value("${stock.api.secret}")
     private String appSecret;
     
     @PostConstruct

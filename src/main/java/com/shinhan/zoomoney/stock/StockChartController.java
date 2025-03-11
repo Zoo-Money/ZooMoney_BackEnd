@@ -45,4 +45,10 @@ public class StockChartController {
         stockChartService.saveStockList(stockDtoList);
         return ResponseEntity.ok("주식 데이터 저장 완료!");
     }
+    
+    @GetMapping("/rank")
+    public ResponseEntity<List<StockDto>> getStockList(){
+    	List<StockDto> stockList = stockChartService.getStockList();
+    	return ResponseEntity.ok(stockList);
+    }
 }

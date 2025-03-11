@@ -1,24 +1,30 @@
 package com.shinhan.zoomoney.account;
 
-import java.util.Date;
+import java.sql.Date;
+import java.time.LocalDate;
 
 import com.shinhan.zoomoney.member.MemberEntity;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.PrePersist;
+import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
 @Entity
-@Table(name="Account")
+@Table(name = "Account")
 public class AccountEntity {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int accountNum;
@@ -34,9 +40,10 @@ public class AccountEntity {
     private Date accountEnd;
     private boolean accountStatus;
 
-
-
+    // Entity 기본값 설정
+    @PrePersist
+    public void prePersist() {
+        this.accountStart = Date.valueOf(LocalDate.now());  // 현재 날짜
+        this.accountStatus = true;  // 기본값 true
+    }
 }
-
-
-
