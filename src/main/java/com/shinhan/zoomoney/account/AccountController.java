@@ -1,0 +1,43 @@
+package com.shinhan.zoomoney.account;
+
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+@RestController
+@RequestMapping("/account")
+public class AccountController {
+    @Autowired
+    private AccountService accountService;
+
+    // 사용자의 저금통 목록 조회
+    @GetMapping("/list/{memberNum}")
+    public List<AccountDto> select(@PathVariable int memberNum) {
+        return accountService.select(memberNum);
+    }
+
+    // 저금통 상세 조회
+    @PostMapping("/select/{accountNum}")
+    public AccountDto selectById(@PathVariable int accountNum) {
+        return accountService.entityToDto(accountService.selectById(accountNum));
+    }
+
+    // 저금통 생성
+    @PostMapping("/insert")
+    public void insert(@RequestBody AccountDto dto) {
+        accountService.insert(dto);
+    }
+
+    // 저금통 상태(활성 여부) 변경
+    @PutMapping("/close/{accountNum}")
+    public void update(@PathVariable int accountNum) {
+        accountService.update(accountNum);
+    }
+}

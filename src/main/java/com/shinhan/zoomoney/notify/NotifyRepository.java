@@ -8,7 +8,7 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface NotifyRepository extends JpaRepository<NotifyEntity, Integer> {
 
-    // 멤버별 알림 목록 조회
+    // 사용자의 알림 목록 조회
     List<NotifyEntity> findAllByMember_MemberNum(int memberNum);
 
     // 읽지 않은 알림 개수 조회
