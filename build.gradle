@@ -38,6 +38,7 @@ dependencies {
 	implementation 'org.modelmapper:modelmapper:2.3.8'
 	developmentOnly 'org.springframework.boot:spring-boot-devtools'
 	implementation group: 'org.modelmapper', name: 'modelmapper', version: '2.3.8'
+	implementation 'com.itextpdf:itextpdf:5.5.13.2'
 }
 
 tasks.named('test') {
