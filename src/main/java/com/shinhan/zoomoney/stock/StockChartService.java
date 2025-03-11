@@ -22,7 +22,6 @@ public class StockChartService {
 	private final RestTemplate restTemplate = new RestTemplate();
 	private final StockChartTokenService tokenService;
 	private final StockChartRepository stockRepository;
-	private StockChartRepository stockChartRepository;
 	
 	@Value("${stock.api.key}")
 	private String apiKey;
