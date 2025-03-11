@@ -39,5 +39,4 @@ public class UseHistoryEntity {
     private String usehistShop;
     private String usehistType;
     private Date usehistDate;
-    private Timestamp usehistTime;
 }
