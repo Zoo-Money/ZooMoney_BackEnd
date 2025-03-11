@@ -1,5 +1,7 @@
 package com.shinhan.zoomoney.contract;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Optional;
 
@@ -116,7 +118,8 @@ public class ContractService {
                 .orElseThrow(() -> new RuntimeException("부모 정보를 찾을 수 없습니다."));
 
         // 부모 서명 이미지 저장
-        String parentSignaturePath = signatureService.saveSignatureImage(parentSignature, "parent_" + parent.getMemberName());
+        String today = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyyMMdd"));
+        String parentSignaturePath = signatureService.saveSignatureImage(parentSignature, "parent_" + parent.getMemberName()+"_"+today);
 
         ContractEntity contract = ContractEntity.builder()
                 .member(parent)

@@ -17,6 +17,9 @@ import org.springframework.web.bind.annotation.*;
 //import org.springframework.web.bind.annotation.RestController;
 //import org.springframework.web.bind.annotation.SessionAttribute;
 
+import com.shinhan.zoomoney.member.MemberEntity;
+import com.shinhan.zoomoney.member.MemberRepository;
+
 @RestController
 @RequestMapping("/contract")
 public class ContractController {
@@ -24,11 +27,23 @@ public class ContractController {
     @Autowired
     ContractService contractService;
     
+    @Autowired  // 주입 추가
+    private MemberRepository memberRepository;
+    
 
     // ✅ 부모가 서명 후 초안 저장 (PDF 생성 X)
     @PostMapping("/saveDraft")
     public String saveDraft(@RequestBody ContractDto contractDto, HttpSession session) {
-        Integer parentId = (Integer) session.getAttribute("userId"); // 부모의 세션 값
+        
+    	//테스트용 부모 세션값
+    	//Integer parentId = "user002".hashCode();
+    	// 🔥 강제 하드코딩 테스트 (DB 조회 추가)
+        Integer parentId = memberRepository.findByMemberId("user002")
+                            .map(MemberEntity::getMemberNum)  // 해당 사용자의 ID 값을 가져옴
+                            .orElseThrow(() -> new IllegalStateException("테스트용 사용자 'user002'를 찾을 수 없습니다."));
+    	
+    	// 세션값 받아오기
+    	//Integer parentId = (Integer) session.getAttribute("userId"); // 부모의 세션 값
 
         if (parentId == null) {
             throw new IllegalStateException("세션 정보가 없습니다. 로그인 후 다시 시도하세요.");
