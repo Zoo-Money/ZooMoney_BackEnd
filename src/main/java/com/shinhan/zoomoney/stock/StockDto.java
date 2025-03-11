@@ -1,7 +1,5 @@
 package com.shinhan.zoomoney.stock;
 
-import java.util.Map;
-
 import lombok.*;
 
 @Data
@@ -34,6 +32,4 @@ public class StockDto {
                 .stock_info(entity.getStockInfo())
                 .build();
     }
-    
-    
 }
