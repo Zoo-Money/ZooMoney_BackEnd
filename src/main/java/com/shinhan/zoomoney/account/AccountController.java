@@ -30,9 +30,9 @@ public class AccountController {
     }
 
     // 저금통 생성
-    @PostMapping("/insert")
-    public void insert(@RequestBody AccountDto dto) {
-        accountService.insert(dto);
+    @PostMapping("/create")
+    public void create(@RequestBody AccountDto dto) {
+        accountService.create(dto);
     }
 
     // 저금통 상태(활성 여부) 변경

@@ -30,7 +30,7 @@ public class AccountService {
     }
 
     // 저금통 생성
-    public void insert(AccountDto dto) {
+    public void create(AccountDto dto) {
         AccountEntity entity = dtoToEntity(dto);
         accountRepo.save(entity);
     }
