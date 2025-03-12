@@ -5,68 +5,55 @@ import org.springframework.stereotype.Service;
 import io.github.bonigarcia.wdm.WebDriverManager;
 
 import java.io.File;
+import java.time.Duration;
 
 import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
 @Service
 public class CompanyInfoService {
-	public String getCompanyInfo(String stockId) {
-		
-		
-		// WebDriverManager를 항상 사용하여 ChromeDriver 설정
-		WebDriverManager.chromedriver().setup();
-		
-		// Chrome 옵션 설정 (headless 모드)
-		ChromeOptions options = new ChromeOptions();
-        options.addArguments("--headless", "--disable-gpu", "--no-sandbox");
+	
+	public String getCompanyInfo(String stockCode) {
+        WebDriverManager.chromedriver().setup();
+        ChromeOptions options = new ChromeOptions();
+        // UI 없이 실행
+        options.addArguments("--headless");  
+        options.addArguments("--disable-gpu");
+        options.addArguments("--no-sandbox");
 
         WebDriver driver = new ChromeDriver(options);
-		
-		
         try {
-            String url = "https://tossinvest.com/stocks/" + stockId + "/analytics?menu=profile";
+            // Toss증권 페이지 URL
+            String url = "https://tossinvest.com/stocks/" + stockCode + "/analytics?menu=profile";
             driver.get(url);
-            // 페이지 로딩 대기
-            Thread.sleep(5000); 
 
-            WebElement companyInfo = driver.findElement(By.cssSelector(".css-1stmyb3"));
-            // 크롤링한 기업 설명 반환
-            return companyInfo.getText(); 
+            // JavaScriptExecutor를 사용하여 페이지가 완전히 로드될 때까지 대기
+            WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(30), Duration.ofSeconds(1));
+            wait.until(webDriver -> ((JavascriptExecutor) webDriver)
+                    .executeScript("return document.readyState").equals("complete"));
+
+            // 새 XPath 사용하여 요소 찾기
+            WebElement companyInfo = wait.until(ExpectedConditions.visibilityOfElementLocated(
+                    By.xpath("//div[contains(@class, '_1n4jthd0')]//span[contains(@class, 'tw-1r5dc8g0')]")));
+
+            // 크롤링 결과 출력
+            String companyDescription = companyInfo.getText();
+            System.out.println("크롤링 결과: " + companyDescription);
+            
+            return companyDescription;
+
         } catch (Exception e) {
             e.printStackTrace();
-            // 크롤링 실패 시 에러 메시지 반환
-            return "Error Crawling"; 
+            return "크롤링 실패";
         } finally {
-            driver.quit();
+        	// 실행 종료
+            driver.quit(); 
         }
     }
-		
-	
-	// 기존 경로 확인 함수
-	private String getExistingChromeDriver() {
-		String[] possiblePaths = {
-				// macOS/Linux 기본 경로
-				"/usr/local/bin/chromedriver",
-				// Ubuntu 기본 경로
-	            "/usr/bin/chromedriver",
-	            // Windows 일반 설치 경로
-	            "C:\\Program Files\\Google\\Chrome\\Application\\chromedriver.exe", 
-	            // 일부 Windows 환경
-	            "C:\\chromedriver.exe"  
-		};
-		
-		for(String path:possiblePaths) {
-			File file = new File(path);
-			if(file.exists()) {
-				System.out.println("기존 ChromeDriver 발견 : " + path);
-				return path;
-			}
-		}
-		System.out.println("기존 ChromeDriver 없음. WebDriverManager 사용.");
-		return null;
-	}
 }

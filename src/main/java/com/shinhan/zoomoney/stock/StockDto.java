@@ -9,6 +9,7 @@ import lombok.*;
 @NoArgsConstructor
 @Builder
 @ToString
+@Setter @Getter
 
 public class StockDto {
 

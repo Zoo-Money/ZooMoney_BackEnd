@@ -120,16 +120,28 @@ public class StockChartService {
     			.collect(Collectors.toList());
     }
     
-    // db 종목 번호 기반으로 toss에서 크롤링
+    // DB 종목 번호 기반으로 toss에서 크롤링
     public List<StockDto> getStockInfoCrwaling(){
     	List<StockEntity> stocks = stockRepository.findAll();
     	
-    	return stocks.stream()
-    			.map(stock->StockDto.fromEntity(
-    					stock,
-    					companyInfoService.getCompanyInfo(stock.getStockId())
-    					))
+    	List<StockDto> updatedStockDtos = stocks.stream()
+    			.map(stock -> {
+    				String stockInfo = companyInfoService.getCompanyInfo(stock.getStockId());
+    				StockDto stockDto = StockDto.fromEntity(stock, stockInfo);
+    				return stockDto;
+    			})
     			.collect(Collectors.toList());
+    	
+    	// 크롤링한 데이터를 Entity로 변환 후 DB에 저장
+    	List<StockEntity> updatedStockEntities = updatedStockDtos.stream()
+    			.map(StockDto::toEntity)
+    			.collect(Collectors.toList());
+    	
+    	// DB에 저장
+    	stockRepository.saveAll(updatedStockEntities); 
+        return updatedStockDtos;
+    	
     }
+    
     
 }
