@@ -2,6 +2,7 @@ package com.shinhan.zoomoney.quiz;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -57,22 +58,6 @@ public class QuizService {
         }
     }
 
-    // ✅ 정답 제출 → DB에 사용자의 정답 여부만 저장
-    public boolean submitAnswer(int memberNum, boolean userAnswer, String correctAnswer) {
-        boolean isCorrect = (userAnswer == correctAnswer.equals("O"));
-
-        MemberEntity member = memberRepository.findById(memberNum)
-                .orElseThrow(() -> new RuntimeException("사용자를 찾을 수 없습니다."));
-
-        QuizEntity quizResult = QuizEntity.builder()
-                .member(member)
-                .quizCheck(isCorrect) // 정답 여부만 저장
-                .quizDate(new Date())
-                .build();
-
-        quizRepository.save(quizResult);
-        return isCorrect;
-    }
 
     private String callGeminiApi(String prompt) {
         try {
@@ -110,5 +95,28 @@ public class QuizService {
             return "퀴즈 생성 중 오류 발생";
         }
     }
+    
+ // ✅ 퀴즈 제출 및 DB 저장
+    public boolean submitQuiz(QuizSubmitDto quizSubmitDto) {
+        boolean isCorrect = quizSubmitDto.getCorrectAnswer().equalsIgnoreCase(quizSubmitDto.getUserAnswer());
 
+        // ✅ 테스트용 memberNum 고정
+        int memberNum = 8;
+
+        // ✅ 사용자 정보 조회
+        MemberEntity member = memberRepository.findById(memberNum)
+            .orElseThrow(() -> new IllegalArgumentException("해당 회원을 찾을 수 없습니다."));
+        
+         // ✅ 퀴즈 결과 저장
+        QuizEntity quizEntity = QuizEntity.builder()
+            .member(member)
+            .quizCheck(isCorrect)
+            .quizDate(new Date())
+            .build();
+
+        quizRepository.save(quizEntity);
+
+        return isCorrect;
+    }
+        
 }
