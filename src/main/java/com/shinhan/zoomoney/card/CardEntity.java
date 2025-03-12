@@ -19,7 +19,7 @@ public class CardEntity {
     @Id
     private String cardNum;
 
-    @ManyToOne
+    @OneToOne
     @JoinColumn(name = "member_num")
     private MemberEntity member;
 

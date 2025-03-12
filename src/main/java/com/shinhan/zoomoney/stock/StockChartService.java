@@ -24,10 +24,10 @@ public class StockChartService {
 	private final StockChartRepository stockRepository;
 	private StockChartRepository stockChartRepository;
 	
-	@Value("${api.key}")
+	@Value("${stock.api.key}")
 	private String apiKey;
 	
-	@Value("${api.secret}")
+	@Value("${stock.api.secret}")
 	private String apiSecret;
 	
 	
@@ -108,5 +108,11 @@ public class StockChartService {
         stockRepository.saveAll(stockEntities); // DB에 저장
     }
     
+    // DB에서 저장된 주식 데이터 "StockDto"로 변환하여 반환
+    public List<StockDto> getStockList(){
+    	return stockRepository.findAll().stream()
+    			.map(StockDto::fromEntity)
+    			.collect(Collectors.toList());
+    }
     
 }
