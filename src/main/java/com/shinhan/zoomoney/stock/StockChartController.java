@@ -19,6 +19,8 @@ public class StockChartController {
 		this.stockChartService = stockChartService;
 	}
 	
+	
+	// API 연결 확인용
 	@GetMapping("/chart")
 	public ResponseEntity<List<Map<String,Object>>> getTop30Stock(){
 		List<Map<String, Object>> stockData = stockChartService.getTopStocks();
@@ -46,9 +48,17 @@ public class StockChartController {
         return ResponseEntity.ok("주식 데이터 저장 완료!");
     }
     
+    // DB에 있는 주식 정보를 가져옴
     @GetMapping("/rank")
     public ResponseEntity<List<StockDto>> getStockList(){
     	List<StockDto> stockList = stockChartService.getStockList();
     	return ResponseEntity.ok(stockList);
     }
+    
+    // Crawling하여 주식 종목을 DB에 저장
+    @GetMapping("/getinfo")
+    public ResponseEntity<List<StockDto>> getStockInfoCrawling(){
+    	return ResponseEntity.ok(stockChartService.getStockInfoCrwaling());
+    }
+    
 }

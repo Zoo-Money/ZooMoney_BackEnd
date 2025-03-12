@@ -27,11 +27,11 @@ public class StockDto {
     }
     
     // StockEntity -> StockDto 변환
-    public static StockDto fromEntity(StockEntity entity) {
+    public static StockDto fromEntity(StockEntity entity, String stockInfo) {
         return StockDto.builder()
                 .stock_name(entity.getStockName())
                 .stock_id(entity.getStockId())
-                .stock_info(entity.getStockInfo())
+                .stock_info(stockInfo)
                 .build();
     }
     

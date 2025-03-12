@@ -22,6 +22,7 @@ public class StockChartService {
 	private final RestTemplate restTemplate = new RestTemplate();
 	private final StockChartTokenService tokenService;
 	private final StockChartRepository stockRepository;
+	private final CompanyInfoService companyInfoService;
 	
 	@Value("${stock.api.key}")
 	private String apiKey;
@@ -33,9 +34,11 @@ public class StockChartService {
 	// API URL (시가총액 기준 TOP 30개만 가져올 수 있음)
     private static final String apiUrl = "https://openapi.koreainvestment.com:9443/uapi/domestic-stock/v1/ranking/market-cap";
     
-    public StockChartService( StockChartTokenService tokenService, StockChartRepository stockRepository) {
+    public StockChartService( StockChartTokenService tokenService, StockChartRepository stockRepository
+    		,CompanyInfoService companyInfoService) {
     	this.tokenService = tokenService;
     	this.stockRepository = stockRepository;
+    	this.companyInfoService = companyInfoService;
     }
     
     public List<Map<String, Object>> getTopStocks() {
@@ -110,7 +113,22 @@ public class StockChartService {
     // DB에서 저장된 주식 데이터 "StockDto"로 변환하여 반환
     public List<StockDto> getStockList(){
     	return stockRepository.findAll().stream()
-    			.map(StockDto::fromEntity)
+    			.map(stock -> StockDto.fromEntity(
+    					stock,
+    					companyInfoService.getCompanyInfo(stock.getStockId())
+    					))
+    			.collect(Collectors.toList());
+    }
+    
+    // db 종목 번호 기반으로 toss에서 크롤링
+    public List<StockDto> getStockInfoCrwaling(){
+    	List<StockEntity> stocks = stockRepository.findAll();
+    	
+    	return stocks.stream()
+    			.map(stock->StockDto.fromEntity(
+    					stock,
+    					companyInfoService.getCompanyInfo(stock.getStockId())
+    					))
     			.collect(Collectors.toList());
     }
     

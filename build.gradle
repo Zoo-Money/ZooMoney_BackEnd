@@ -39,6 +39,18 @@ dependencies {
 	implementation 'org.jsoup:jsoup:1.15.3'
 	implementation 'org.modelmapper:modelmapper:2.3.8'
 	developmentOnly 'org.springframework.boot:spring-boot-devtools'
+	
+	//Seliniunm (토스에서 웹크롤링 하기 위함)
+	implementation 'org.seleniumhq.selenium:selenium-java:4.15.0'
+    implementation 'org.seleniumhq.selenium:selenium-chrome-driver:4.5.0'
+    implementation 'io.github.bonigarcia:webdrivermanager:5.8.0'
+    // 의존성 충돌 방지 (강제 적용)
+    configurations.all {
+        resolutionStrategy {
+            force 'org.seleniumhq.selenium:selenium-java:4.15.0'
+            force 'io.github.bonigarcia:webdrivermanager:5.8.0'
+        }
+    }
 
 }
 tasks.named('test') {
