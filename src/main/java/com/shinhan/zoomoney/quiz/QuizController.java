@@ -61,7 +61,6 @@ public class QuizController {
     public ResponseEntity<?> getCorrectAnswerCount(){
     	int memberNum = 8; // 테스트용 고정값
     	int correctAnswerCount = quizService.howManyCorrectAnswer(memberNum);
-    	System.out.println(correctAnswerCount);
     	return ResponseEntity.ok(Collections.singletonMap("correctAnswerCount", correctAnswerCount));
     }
     

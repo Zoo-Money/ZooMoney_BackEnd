@@ -37,11 +37,8 @@ public class QuizService {
  
       String keyword1 = keywords.get(0);
       String keyword2 = keywords.get(1);
-      
-      System.out.println(keyword1);
-      System.out.println(keyword2);
-    	
-    	String prompt = String.format(
+
+      String prompt = String.format(
     	         "'%s'와 '%s' 이 키워드와 관련된 새로운 금융 OX 퀴즈 한 문제를 만들어줘. 문제 자체에 (O/X)는 포함시킬 필요없어. 금융 지식이 부족한 사람도 풀 수 있을 수준의 문제여야해. JSON 형식으로 한국어로 응답해줘. 예제: { 'question': '질문 내용', 'answer': 'O 또는 X', 'explanation': '정답에 대한 간단한 설명' }",
     	         keyword1, keyword2
     	     );
@@ -70,10 +67,6 @@ public class QuizService {
             HttpEntity<String> entity = new HttpEntity<>(requestBody, headers);
             ResponseEntity<String> response = restTemplate.exchange(GEMINI_API_URL, HttpMethod.POST, entity, String.class);
 
-
-            // ✅ 응답을 그대로 출력해서 확인!
-            System.out.println("Raw API Response: " + response.getBody());
-
             // JSON이 아니라면 예외 발생 가능 → 예외 처리 추가
             ObjectMapper mapper = new ObjectMapper();
             JsonNode root = mapper.readTree(response.getBody());
@@ -98,7 +91,6 @@ public class QuizService {
     // ✅ 퀴즈 data 개수 확인
     public Integer howManyQuiz(int memberNum) {
     	int todayQuizCount = quizRepository.countQuiz(memberNum);
-    	System.out.println(">>>>>>퀴즈 data 개수"+todayQuizCount);
     	return todayQuizCount;
     }
     
