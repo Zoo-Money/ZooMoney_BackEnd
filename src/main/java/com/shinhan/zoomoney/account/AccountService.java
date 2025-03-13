@@ -45,6 +45,16 @@ public class AccountService {
         }
     }
 
+    // 저금통 금액 입금
+    public void insert(int accountNum, int amount) {
+        AccountEntity entity = accountRepo.findById(accountNum).orElse(null);
+
+        if (entity != null) {
+            entity.setAccountNow(entity.getAccountNow() + amount); // 저금통 금액 입금
+            accountRepo.save(entity);
+        }
+    }
+
     // DTO → Entity 변환
     public AccountEntity dtoToEntity(AccountDto dto) {
         return modelMapper.map(dto, AccountEntity.class);
