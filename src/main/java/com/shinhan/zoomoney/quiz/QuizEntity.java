@@ -16,24 +16,21 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-
-
-
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
 @Entity
-@Table(name="Quiz")
+@Table(name = "Quiz")
 public class QuizEntity {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int quizNum;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private int quizNum;
 
-    @ManyToOne
-    @JoinColumn(name = "member_num")
-    private MemberEntity member;
+	@ManyToOne
+	@JoinColumn(name = "member_num")
+	private MemberEntity member;
 
-    private boolean quizCheck;
-    private Date quizDate;
+	private boolean quizCheck;
+	private Date quizDate;
 }
