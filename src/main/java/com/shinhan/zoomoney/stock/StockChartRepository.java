@@ -8,6 +8,8 @@ import java.util.List;
 
 public interface StockChartRepository extends JpaRepository<StockEntity, Integer>{
 	Optional<StockEntity> findByStockId(String stock_id);
+	// 중복 저장 방지
+	boolean existsByStockId(String stockId);
 	
 
 }
