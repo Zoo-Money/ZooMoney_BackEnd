@@ -8,10 +8,13 @@ import java.sql.Date;
 @NoArgsConstructor
 @Builder
 @ToString
+@Getter
+@Setter
 public class QuizDto {
 
     private int quiz_num;
-    private int child_num;
+    private int member_num;
     private boolean quiz_check;
     private Date quiz_date;
+    
 }
