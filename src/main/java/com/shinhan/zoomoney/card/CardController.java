@@ -1,10 +1,10 @@
 package com.shinhan.zoomoney.card;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -38,9 +38,8 @@ public class CardController {
 	@GetMapping("/get")
 	public CardEntity getMyCards(HttpSession session) {
 		// 세션에서 memberNum 가져오기
-
-		// Integer memberNum = (Integer) session.getAttribute("member_num");
-		Integer memberNum = 1;
+		//Integer memberNum = (Integer) session.getAttribute("member_num");
+		Integer memberNum=2;
 		// 해당 회원의 카드 목록 조회
 		CardEntity memberCards = cardService.getCardsByMemberNum(memberNum);
 
@@ -48,15 +47,22 @@ public class CardController {
 		session.setAttribute("tokenId", memberCards.getCardMetadata());
 		session.setAttribute("card_num", memberCards.getCardNum());
 		session.setAttribute("card_money", memberCards.getCardMoney());
+		session.setAttribute("card_metadata", memberCards.getCardMetadata());
 
 		return memberCards;
 	}
 
 	// 카드 이미지 변경
-	@PutMapping("/modify")
-	public String CardModify() {
-		return "change ok";
-	}
+	 @PutMapping("/update")
+	    public ResponseEntity<String> updateCardDate(HttpSession session) {
+	        // 세션에서 memberNum 가져오기
+			//Integer memberNum = (Integer) session.getAttribute("member_num");
+			//String cardNum = (String) session.getAttribute("card_num");
+			Integer memberNum = 2;
+			String cardNum= "5885-2760-4884-0198";
+			cardService.updateCardDate(memberNum,cardNum);
+	        return ResponseEntity.ok("카드 업데이트 날짜가 성공적으로 변경되었습니다.");
+	 }
 
 	// 카드 거래내역 가져오기
 	@GetMapping("/select")

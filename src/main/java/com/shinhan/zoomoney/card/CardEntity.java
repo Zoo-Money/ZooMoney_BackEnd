@@ -1,6 +1,8 @@
 package com.shinhan.zoomoney.card;
 
 
+import java.util.Date;
+
 import com.shinhan.zoomoney.member.MemberEntity;
 
 import jakarta.persistence.*;
@@ -25,4 +27,10 @@ public class CardEntity {
 
     private String cardMetadata;
     private int cardMoney;
+    private Date cardUpdate; 
+    
+    @PrePersist
+    public void setCardUpdate() {
+        this.cardUpdate = new Date(); // 현재 날짜와 시간을 자동으로 설정
+    }
 }
