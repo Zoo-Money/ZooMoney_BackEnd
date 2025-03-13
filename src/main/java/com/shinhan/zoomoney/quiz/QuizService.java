@@ -2,7 +2,6 @@ package com.shinhan.zoomoney.quiz;
 
 import java.util.Date;
 import java.util.List;
-import java.util.Map;
 
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -96,7 +95,20 @@ public class QuizService {
         }
     }
     
- // ✅ 퀴즈 제출 및 DB 저장
+    // ✅ 퀴즈 data 개수 확인
+    public Integer howManyQuiz(int memberNum) {
+    	int todayQuizCount = quizRepository.countQuiz(memberNum);
+    	System.out.println(">>>>>>퀴즈 data 개수"+todayQuizCount);
+    	return todayQuizCount;
+    }
+    
+    // ✅ 맞춘 퀴즈 data 개수 확인
+    public Integer howManyCorrectAnswer(int memberNum) {
+    	int correctAnswerCount = quizRepository.countCorrectAnswer(memberNum);
+    	return correctAnswerCount;
+    }
+    
+    // ✅ 퀴즈 제출 및 DB 저장
     public boolean submitQuiz(QuizSubmitDto quizSubmitDto) {
         boolean isCorrect = quizSubmitDto.getCorrectAnswer().equalsIgnoreCase(quizSubmitDto.getUserAnswer());
 
@@ -106,6 +118,13 @@ public class QuizService {
         // ✅ 사용자 정보 조회
         MemberEntity member = memberRepository.findById(memberNum)
             .orElseThrow(() -> new IllegalArgumentException("해당 회원을 찾을 수 없습니다."));
+        
+        // ✅ 정답 맞추면 memberPoint 100점 추가 (null 값 처리 포함)
+        if (isCorrect) {
+            int currentPoint = (member.getMemberPoint() == null) ? 0 : member.getMemberPoint();
+            member.setMemberPoint(currentPoint + 100);
+            memberRepository.save(member);
+        }
         
          // ✅ 퀴즈 결과 저장
         QuizEntity quizEntity = QuizEntity.builder()
@@ -118,5 +137,7 @@ public class QuizService {
 
         return isCorrect;
     }
-        
+    
+    
+
 }

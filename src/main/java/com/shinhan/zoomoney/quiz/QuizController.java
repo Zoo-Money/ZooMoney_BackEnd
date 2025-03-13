@@ -1,18 +1,14 @@
 package com.shinhan.zoomoney.quiz;
 
-import java.util.Optional;
+import java.util.Collections;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.shinhan.zoomoney.member.MemberEntity;
-import com.shinhan.zoomoney.member.MemberRepository;
-
-import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 
 @RestController
@@ -32,18 +28,41 @@ public class QuizController {
         }
         return ResponseEntity.ok(quiz);
     }
-
-    private final QuizRepository quizRepository;
-    private final MemberRepository memberRepository;
-        
+    
     // ✅ 퀴즈 제출 및 정답 여부 저장
     @PostMapping("/submit")
     public ResponseEntity<?> submitQuiz(@RequestBody QuizSubmitDto quizSubmitDto) {
+    	
+        int memberNum = 8; // 테스트용 고정값    	
+        
+        // ✅ 퀴즈 data가 5개 이상이면 퀴즈 응시 불가능
+        // true면 응시 불가
+        int quizCount = quizService.howManyQuiz(memberNum);
+        if(quizCount>=5) {
+        	return ResponseEntity.ok(Collections.singletonMap("isLimited", true));
+        }
+    	
+        // ✅ 퀴즈 제출 및 정답 여부 저장
         boolean isCorrect = quizService.submitQuiz(quizSubmitDto);
         return ResponseEntity.ok().body("{\"isCorrect\": " + isCorrect + "}");
     }
     
-}
-
+    // ✅ 오늘 푼 퀴즈 개수 확인 API
+    @GetMapping("/count")
+    public ResponseEntity<?> getTodayQuizCount(){
+    	int memberNum = 8; // 테스트용 고정값
+    	int quizCount = quizService.howManyQuiz(memberNum);
+    	
+    	return ResponseEntity.ok(Collections.singletonMap("quizCount", quizCount));
+    }
     
-
+    // ✅ 오늘 맞은 퀴즈 개수 확인 API
+    @GetMapping("/total")
+    public ResponseEntity<?> getCorrectAnswerCount(){
+    	int memberNum = 8; // 테스트용 고정값
+    	int correctAnswerCount = quizService.howManyCorrectAnswer(memberNum);
+    	System.out.println(correctAnswerCount);
+    	return ResponseEntity.ok(Collections.singletonMap("correctAnswerCount", correctAnswerCount));
+    }
+    
+}
