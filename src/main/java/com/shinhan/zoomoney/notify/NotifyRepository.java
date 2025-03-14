@@ -12,6 +12,6 @@ public interface NotifyRepository extends JpaRepository<NotifyEntity, Integer> {
     List<NotifyEntity> findAllByMember_MemberNum(int memberNum);
 
     // 읽지 않은 알림 개수 조회
-    @Query("SELECT COUNT(n) FROM NotifyEntity n WHERE n.member.memberNum = :memberNum AND n.notifyCheck = false")
+    @Query("SELECT COUNT(e) FROM NotifyEntity e WHERE e.member.memberNum = :memberNum AND e.notifyCheck = false")
     int countByUnread(int memberNum);
 }

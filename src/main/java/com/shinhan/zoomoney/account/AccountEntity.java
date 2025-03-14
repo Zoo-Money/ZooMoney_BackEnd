@@ -43,6 +43,7 @@ public class AccountEntity {
     // Entity 기본값 설정
     @PrePersist
     public void prePersist() {
+        this.accountNow = 0;
         this.accountStart = Date.valueOf(LocalDate.now());  // 현재 날짜
         this.accountStatus = true;  // 기본값 true
     }
