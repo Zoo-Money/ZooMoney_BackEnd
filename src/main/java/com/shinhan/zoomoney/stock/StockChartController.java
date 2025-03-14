@@ -1,11 +1,15 @@
 package com.shinhan.zoomoney.stock;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -55,10 +59,26 @@ public class StockChartController {
     	return ResponseEntity.ok(stockList);
     }
     
-    // Crawling하여 주식 종목을 DB에 저장
-    @GetMapping("/getinfo")
-    public ResponseEntity<List<StockDto>> getStockInfoCrawling(){
-    	return ResponseEntity.ok(stockChartService.getStockInfoCrwaling());
+    
+    // Stock 테이블 초기화 후, api와 Crawling한 데이터 DB에 저장
+    @PutMapping("/getinfo")
+    public ResponseEntity<List<StockDto>> updateStockTable(){
+    	return ResponseEntity.ok(stockChartService.updateStockTable());
     }
+    
+    // 특정 종목 코드(stockId)로 stock_info 가져오기
+    @GetMapping("/info/{stockId}")
+    public ResponseEntity<Map<String,String>> getStockInfoById(@PathVariable("stockId") String stockId) {
+    	String stockInfo = stockChartService.getStockInfoById(stockId);
+    	
+    	if(stockInfo != null) {
+    		Map<String, String>response = new HashMap<>();
+    		response.put("stock_info", stockInfo);
+    		return ResponseEntity.ok(response);
+    	}else {
+    		return ResponseEntity.notFound().build();
+    	}
+    }
+    
     
 }
