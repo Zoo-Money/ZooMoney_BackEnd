@@ -31,8 +31,6 @@ public class StockChartTokenService {
     @PostConstruct
     public void init() {
         System.out.println("✅ StockChartTokenService 초기화됨");
-        System.out.println("🔑 API Key: " + appKey);
-        System.out.println("🔐 API Secret: " + appSecret);
     }
 	
     private static final String tokenUrl = "https://openapi.koreainvestment.com:9443/oauth2/tokenP";
