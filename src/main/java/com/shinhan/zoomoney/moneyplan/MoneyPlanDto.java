@@ -1,8 +1,11 @@
 package com.shinhan.zoomoney.moneyplan;
 
+import java.util.Date;
+import java.util.List;
+
 import lombok.*;
 
-import java.sql.Date;
+
 
 @Data
 @AllArgsConstructor
@@ -16,4 +19,6 @@ public class MoneyPlanDto {
     private Date plan_date;
     private int plan_money;
     private boolean plan_status;
+    
+    private List<PlanDetailDto> planDetails;
 }
