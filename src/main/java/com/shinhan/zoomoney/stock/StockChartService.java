@@ -4,6 +4,7 @@ package com.shinhan.zoomoney.stock;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Value;
@@ -22,7 +23,7 @@ public class StockChartService {
 	private final RestTemplate restTemplate = new RestTemplate();
 	private final StockChartTokenService tokenService;
 	private final StockChartRepository stockRepository;
-	private StockChartRepository stockChartRepository;
+	private final CompanyInfoService companyInfoService;
 	
 	@Value("${stock.api.key}")
 	private String apiKey;
@@ -34,9 +35,11 @@ public class StockChartService {
 	// API URL (시가총액 기준 TOP 30개만 가져올 수 있음)
     private static final String apiUrl = "https://openapi.koreainvestment.com:9443/uapi/domestic-stock/v1/ranking/market-cap";
     
-    public StockChartService( StockChartTokenService tokenService, StockChartRepository stockRepository) {
+    public StockChartService( StockChartTokenService tokenService, StockChartRepository stockRepository
+    		,CompanyInfoService companyInfoService) {
     	this.tokenService = tokenService;
     	this.stockRepository = stockRepository;
+    	this.companyInfoService = companyInfoService;
     }
     
     public List<Map<String, Object>> getTopStocks() {
@@ -111,8 +114,80 @@ public class StockChartService {
     // DB에서 저장된 주식 데이터 "StockDto"로 변환하여 반환
     public List<StockDto> getStockList(){
     	return stockRepository.findAll().stream()
-    			.map(StockDto::fromEntity)
+    			.map(stock -> StockDto.fromEntity(
+    					stock,
+    					companyInfoService.getCompanyInfo(stock.getStockId())
+    					))
     			.collect(Collectors.toList());
+    }
+    
+    // DB 종목 번호 기반으로 toss에서 크롤링
+    public List<StockDto> getStockInfoCrwaling(){
+    	List<StockEntity> stocks = stockRepository.findAll();
+    	
+    	List<StockDto> updatedStockDtos = stocks.stream()
+    			.map(stock -> {
+    				String stockInfo = companyInfoService.getCompanyInfo(stock.getStockId());
+    				StockDto stockDto = StockDto.fromEntity(stock, stockInfo);
+    				return stockDto;
+    			})
+    			.collect(Collectors.toList());
+    	
+    	// 크롤링한 데이터를 Entity로 변환 후 DB에 저장
+    	List<StockEntity> updatedStockEntities = updatedStockDtos.stream()
+    			.map(StockDto::toEntity)
+    			.collect(Collectors.toList());
+    	
+    	// DB 저장 전에 기존 데이터 삭제
+    	stockRepository.deleteAll();
+    	
+    	// DB에 저장
+    	stockRepository.saveAll(updatedStockEntities); 
+        return updatedStockDtos;
+    	
+    }
+   
+    
+   
+    // 특정 종목 코드 (stockId)로 stockInfo 가져오기 (단, stock_num이 31~60 사이인 경우)
+    public String getStockInfoById(String stockId) {
+    	return stockRepository.findStockInfoByStockId(stockId);
+    }
+    
+    // Stock 테이블 갱신 함수
+    @Transactional
+    public List<StockDto> updateStockTable(){
+        // 기존 데이터 삭제 (Stock 테이블 전체 삭제)
+        stockRepository.deleteAll();
+
+        // 새로운 데이터 API에서 가져오기
+        List<Map<String, Object>> stockList = getTopStocks();
+
+        List<StockDto> stockDtos = stockList.stream()
+                .map(stock -> new StockDto(
+                        null,
+                        (String) stock.get("hts_kor_isnm"), // 주식 종목명
+                        (String) stock.get("mksc_shrn_iscd"), // 주식 코드
+                        null // stock_info는 아직 없음
+                ))
+                .collect(Collectors.toList());
+
+        // 종목 코드 기반으로 크롤링하여 stockInfo 업데이트
+        List<StockDto> updatedStockDtos = stockDtos.stream()
+                .map(dto -> {
+                    String stockInfo = companyInfoService.getCompanyInfo(dto.getStock_id());
+                    dto.setStock_info(stockInfo);
+                    return dto;
+                })
+                .collect(Collectors.toList());
+
+        // 크롤링한 데이터를 Entity로 변환 후 DB에 저장
+        List<StockEntity> updatedStockEntities = updatedStockDtos.stream()
+                .map(StockDto::toEntity)
+                .collect(Collectors.toList());
+        // 새로운 데이터 저장
+        stockRepository.saveAll(updatedStockEntities); 
+        return updatedStockDtos;
     }
     
 }
