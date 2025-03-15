@@ -83,6 +83,7 @@ public class CardController {
 
 	@GetMapping("analysis")
 	public List<UseHistoryDto> UseHistory() {
+		
 		return null;
 	}
 
