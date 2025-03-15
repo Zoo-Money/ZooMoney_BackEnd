@@ -1,0 +1,11 @@
+package com.shinhan.zoomoney.moneyplan;
+
+import java.util.List;
+
+import org.springframework.data.jpa.repository.JpaRepository;
+
+public interface MoneyPlanRepository extends JpaRepository<MoneyPlanEntity, Integer> {
+
+    List<MoneyPlanEntity> findByMember_MemberNum(int memberNum);
+}
+
