@@ -59,22 +59,14 @@ public class CardController {
 
 		return ResponseEntity.ok(memberCards);
 	}
-
-//	// 카드 이미지 변경
-//	@PutMapping("/update")
-//	public ResponseEntity<String> updateCardDate(HttpSession session,
-//			@RequestParam("member_num") Integer memberNum,
-//			@RequestParam("card_num") String cardNum) {
 	// 카드 이미지 변경
 	@PutMapping("/update")
 	public ResponseEntity<String> updateCardDate(HttpSession session,
 			@RequestBody Map<String,Object> cardData) {
-		System.out.println(cardData);
+	
 		Integer memberNum = Integer.parseInt((String) cardData.get("member_num"));
-		System.err.println(memberNum);
-		
 		String cardNum = (String)cardData.get("card_num");
-		System.out.println(cardNum);
+		
 		cardService.updateCardDate(memberNum, cardNum);
 		memberService.deductMemberPoint(memberNum);
 		
