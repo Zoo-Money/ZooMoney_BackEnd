@@ -48,7 +48,15 @@ dependencies {
 
     // ✅ WebDriverManager 추가 (자동 ChromeDriver 설정)
     implementation 'io.github.bonigarcia:webdrivermanager:5.7.0'
+
+	// ✅ 웹소캣
+	implementation 'org.springframework.boot:spring-boot-starter-websocket'
+	implementation 'org.springframework.boot:spring-boot-starter-webflux'
+	implementation 'org.springframework:spring-websocket'
 }
 tasks.named('test') {
 	useJUnitPlatform()
+}
+tasks.withType(JavaCompile) {
+	options.compilerArgs << '-parameters'
 }
