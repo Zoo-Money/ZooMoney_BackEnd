@@ -42,7 +42,7 @@ public class MoneyPlanService {
 
 	//용돈계약서에서 지급 금액 가져오기
 	public int getAllowance(int memberNum) {
-		ContractEntity contract = contractRepo.findByMember_MemberNumAndContractStatusTrue(memberNum);
+		ContractEntity contract = contractRepo.findTopByMember_MemberNumAndContractStatusTrueOrderByContractNumDesc(memberNum);
 		if(contract != null) {
 			return contract.getContractMoney();
 		}
