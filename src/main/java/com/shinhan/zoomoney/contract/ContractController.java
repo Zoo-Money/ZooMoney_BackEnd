@@ -123,9 +123,7 @@ public class ContractController {
 		}
 	}
 	
-	
-    
-    
+	  
     // 부모가 서명 후 초안 저장 (PDF 생성 X)
     @PostMapping("/saveDraft")
     public String saveDraft(@RequestBody ContractDto contractDto, HttpSession session) {
@@ -141,12 +139,6 @@ public class ContractController {
 //            throw new IllegalStateException("세션 정보가 없습니다. 로그인 후 다시 시도하세요.");
 //        }
         
-//        System.out.println(" contract_content: " + contractDto.getContract_content());
-//        System.out.println(" contract_date: " + contractDto.getContract_date());
-//        System.out.println(" contract_excelpath: " + contractDto.getContract_excelpath());
-//        System.out.println(" contract_filepath: " + contractDto.getContract_filepath());
-//        System.out.println("parentId:" + parentId); // 결과 : 2
-       
         return contractService.saveDraft(contractDto, parentId, contractDto.getContract_excelpath());
     }
     
@@ -215,7 +207,6 @@ public class ContractController {
 //	    }
 	
 	    // 서비스 호출 (서명 저장 및 PDF 생성)
-//	    return contractService.completeContract(contractNum, childSignature, childId);
 	    return contractService.completeContract(childNum, childSignature);
 	}
 	
@@ -238,8 +229,6 @@ public class ContractController {
 	}
 
     
-    
-
     // 현재 유효한 계약서 조회
     @GetMapping("/select")
     public ContractEntity getValidContract(@RequestParam("childNum") int childNum) {
@@ -261,6 +250,7 @@ public class ContractController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("유효한 계약서가 없습니다.");
         }
     }
+    
     // 과거 계약서 목록 조회 API
     @GetMapping("/history")
     public ResponseEntity<List<ContractEntity>> getPastContracts(@RequestParam("childNum") int childNum) {
@@ -274,8 +264,6 @@ public class ContractController {
         }
     }
 
-    
-    
     // 계약서 비활성화 (계약 종료 시)
     @PutMapping("/disable/{contractNum}")
     public String disableContract(@PathVariable int contractNum) {

@@ -30,7 +30,6 @@ public class PdfService {
 		String fileName = String.format("contract_%d_%s_%s.pdf", contractId, childName.replaceAll("\\s", ""),
 				LocalDate.now().format(DateTimeFormatter.ofPattern("yyyyMMdd")));
 
-//		String filePath = "src/main/resources/contract_pdf/" + fileName;
 		String filePath = "src/main/resources/static/contract_pdf/" + fileName;
 
 		// 폴더가 없으면 생성
@@ -80,7 +79,7 @@ public class PdfService {
 
 
 			// 부모 서명 & 자녀 서명을 한 줄에 추가 (테이블 사용)
-			PdfPTable table = new PdfPTable(2); // 🔹 2열 테이블 생성
+			PdfPTable table = new PdfPTable(2); // 2열 테이블 생성
 			table.setWidthPercentage(100); // 🔹 테이블 너비 설정
 
 			PdfPCell parentCell = new PdfPCell();
@@ -88,19 +87,19 @@ public class PdfService {
 			Image parentImage = Image.getInstance(parentSignaturePath);
 			parentImage.scaleToFit(100, 50);
 			parentCell.addElement(parentImage);
-			// parentCell.setBorder(Rectangle.NO_BORDER); // 🔹 테두리 제거
+			// parentCell.setBorder(Rectangle.NO_BORDER); // 테두리 제거
 
 			PdfPCell childCell = new PdfPCell();
 			childCell.addElement(new Paragraph("자녀 서명:", contentFont));
 			Image childImage = Image.getInstance(childSignaturePath);
 			childImage.scaleToFit(100, 50);
 			childCell.addElement(childImage);
-			// childCell.setBorder(Rectangle.NO_BORDER); // 🔹 테두리 제거
+			// childCell.setBorder(Rectangle.NO_BORDER); // 테두리 제거
 
 			table.addCell(parentCell);
 			table.addCell(childCell);
 
-			document.add(table); // 🔹 최종적으로 테이블 추가
+			document.add(table); // 최종적으로 테이블 추가
 
 		} catch (DocumentException | IOException e) {
 			e.printStackTrace();
@@ -108,10 +107,7 @@ public class PdfService {
 		} finally {
 			document.close();
 		}
-
-//		return filePath; 
-//		return "/contract/pdf/" + fileName;  // ✅ API에서 접근 가능한 경로로 변경
-		 return fileName; // ✅ 파일명만 반환하도록 변경
+		 return fileName; // 파일명만 반환하도록 변경
 
 	}
 }
