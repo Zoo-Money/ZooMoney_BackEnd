@@ -39,6 +39,7 @@ public class AccountEntity {
     private Date accountStart;
     private Date accountEnd;
     private boolean accountStatus;
+    private boolean accountRequest;
 
     // Entity 기본값 설정
     @PrePersist
@@ -46,5 +47,6 @@ public class AccountEntity {
         this.accountNow = 0;
         this.accountStart = Date.valueOf(LocalDate.now());  // 현재 날짜
         this.accountStatus = true;  // 기본값 true
+        this.accountRequest = false;  // 기본값 false
     }
 }
