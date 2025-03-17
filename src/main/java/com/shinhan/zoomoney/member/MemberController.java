@@ -59,7 +59,7 @@ public class MemberController {
     }
 
     @GetMapping("/{memberNum}/select")
-	public List<MemberEntity> select(@PathVariable int memberNum) {
+	public List<MemberEntity> select(@PathVariable("memberNum") int memberNum) {
         List<MemberEntity> memberInfo = memberService.selectByMemberNum(memberNum);
         return memberInfo;
     }

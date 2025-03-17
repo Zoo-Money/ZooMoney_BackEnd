@@ -14,7 +14,6 @@ public interface MemberRepository extends JpaRepository<MemberEntity, Integer> {
 	 
     // 부모 ID 조회 
     Optional<MemberEntity> findByMemberId(String memberId);
-    
     // 부모의 아이들 조회
     List<MemberEntity> findByMemberParent(MemberEntity memberParent);
     
