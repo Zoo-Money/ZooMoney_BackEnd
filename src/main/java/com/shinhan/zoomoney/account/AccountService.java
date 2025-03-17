@@ -30,17 +30,37 @@ public class AccountService {
     }
 
     // 저금통 생성
-    public void insert(AccountDto dto) {
+    public void create(AccountDto dto) {
         AccountEntity entity = dtoToEntity(dto);
         accountRepo.save(entity);
     }
 
+    // 저금통 금액 입금
+    public void insert(int accountNum, int amount) {
+        AccountEntity entity = accountRepo.findById(accountNum).orElse(null);
+
+        if (entity != null) {
+            entity.setAccountNow(entity.getAccountNow() + amount); // 저금통 금액 입금
+            accountRepo.save(entity);
+        }
+    }
+
     // 저금통 상태(활성 여부) 변경
-    public void update(int accountNum) {
+    public void close(int accountNum) {
         AccountEntity entity = accountRepo.findById(accountNum).orElse(null);
 
         if (entity != null) {
             entity.setAccountStatus(false); // 비활성화로 상태 변경
+            accountRepo.save(entity);
+        }
+    }
+
+    // 저금통 상태(해지 요청) 변경
+    public void request(int accountNum, boolean request) {
+        AccountEntity entity = accountRepo.findById(accountNum).orElse(null);
+
+        if (entity != null) {
+            entity.setAccountRequest(request); // 해지 요청 상태 변경
             accountRepo.save(entity);
         }
     }

@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class MemberService {
@@ -18,9 +19,39 @@ public class MemberService {
     public List<MemberEntity> selectByMemberNum(int member_num) {
         return memberRepository.findByMemberNum(member_num);
     }
+    
     public String getMemberAccount(String memberId) {
     	   return memberRepository.findByMemberId(memberId)
                    .map(MemberEntity::getMemberAccount)
                    .orElse("계좌 정보가 없습니다.");
        }
+
+    //카드 이미지 변경시 포인트 차감
+    public void deductMemberPoint(Integer memberNum) {
+        // memberNum이 null인 경우 예외 처리
+        if (memberNum == null) {
+            throw new IllegalArgumentException("memberNum이 null입니다.");
+        }
+
+        Optional<MemberEntity> optionalMember = memberRepository.findById(memberNum);
+        int minusPoint = 10000;
+
+        if (optionalMember.isPresent()) {
+            MemberEntity member = optionalMember.get();
+            
+            // 현재 포인트 확인 (null이면 0으로 설정)
+            Integer currentPoint = member.getMemberPoint() != null ? member.getMemberPoint() : 0;
+
+            if (currentPoint < minusPoint) {
+                throw new IllegalArgumentException("포인트가 부족합니다.");
+            }
+
+            // 포인트 차감 후 저장
+            member.setMemberPoint(currentPoint - minusPoint);
+            memberRepository.save(member);
+            
+        } else {
+            throw new IllegalArgumentException("해당 회원을 찾을 수 없습니다.");
+        }
+    }
 }

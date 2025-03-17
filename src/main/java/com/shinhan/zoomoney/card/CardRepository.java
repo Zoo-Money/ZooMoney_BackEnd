@@ -13,6 +13,6 @@ public interface CardRepository extends JpaRepository<CardEntity, String> {
     
 	
     CardEntity findByMember(MemberEntity member);
-  
-    
+
+    CardEntity findByMemberMemberNumAndCardNum(Integer memberNum, String cardNum);
 }

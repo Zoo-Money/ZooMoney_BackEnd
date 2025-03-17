@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -30,14 +31,26 @@ public class AccountController {
     }
 
     // 저금통 생성
-    @PostMapping("/insert")
-    public void insert(@RequestBody AccountDto dto) {
-        accountService.insert(dto);
+    @PostMapping("/create")
+    public void create(@RequestBody AccountDto dto) {
+        accountService.create(dto);
+    }
+
+    // 저금통 금액 입금
+    @PutMapping("/insert/{accountNum}")
+    public void change(@PathVariable int accountNum, @RequestParam int amount) {
+        accountService.insert(accountNum, amount);
     }
 
     // 저금통 상태(활성 여부) 변경
     @PutMapping("/close/{accountNum}")
-    public void update(@PathVariable int accountNum) {
-        accountService.update(accountNum);
+    public void close(@PathVariable int accountNum) {
+        accountService.close(accountNum);
+    }
+
+    // 저금통 상태(해지 요청) 변경
+    @PutMapping("/request/{accountNum}")
+    public void request(@PathVariable int accountNum, @RequestParam boolean request) {
+        accountService.request(accountNum, request);
     }
 }
