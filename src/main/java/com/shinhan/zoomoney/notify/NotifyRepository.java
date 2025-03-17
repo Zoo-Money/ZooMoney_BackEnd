@@ -9,6 +9,7 @@ import org.springframework.stereotype.Repository;
 public interface NotifyRepository extends JpaRepository<NotifyEntity, Integer> {
 
     // 사용자의 알림 목록 조회
+    @Query("SELECT e FROM NotifyEntity e WHERE e.member.memberNum = :memberNum ORDER BY e.notifyTime DESC")
     List<NotifyEntity> findAllByMember_MemberNum(int memberNum);
 
     // 읽지 않은 알림 개수 조회
