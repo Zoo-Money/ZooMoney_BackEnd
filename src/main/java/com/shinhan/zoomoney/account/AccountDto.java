@@ -22,4 +22,5 @@ public class AccountDto {
     private Date accountStart;
     private Date accountEnd;
     private boolean accountStatus;
+    private boolean accountRequest;
 }

@@ -1,17 +1,22 @@
 package com.shinhan.zoomoney.card;
 
+import java.lang.reflect.Member;
 import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
+import com.shinhan.zoomoney.member.MemberService;
 
 import jakarta.servlet.http.HttpSession;
 
@@ -21,6 +26,12 @@ public class CardController {
 
 	@Autowired
 	private CardService cardService;
+
+	@Autowired
+	private UseHistoryService useHistoryService;
+	
+	@Autowired
+	private MemberService memberService;
 
 	// 카드 생성
 	@PostMapping("/create")
@@ -35,13 +46,8 @@ public class CardController {
 		}
 	}
 
-	// 카드 조회
 	@GetMapping("/get")
-	public CardEntity getMyCards(HttpSession session) {
-		// 세션에서 memberNum 가져오기
-
-		// Integer memberNum = (Integer) session.getAttribute("member_num");
-		Integer memberNum = 1;
+	public ResponseEntity<?> getCardInfo(HttpSession session,@RequestHeader("member_num") Integer memberNum) {
 		// 해당 회원의 카드 목록 조회
 		CardEntity memberCards = cardService.getCardsByMemberNum(memberNum);
 
@@ -49,25 +55,35 @@ public class CardController {
 		session.setAttribute("tokenId", memberCards.getCardMetadata());
 		session.setAttribute("card_num", memberCards.getCardNum());
 		session.setAttribute("card_money", memberCards.getCardMoney());
+		session.setAttribute("card_metadata", memberCards.getCardMetadata());
 
-		return memberCards;
+		return ResponseEntity.ok(memberCards);
 	}
-
 	// 카드 이미지 변경
-	@PutMapping("/modify")
-	public String CardModify() {
-		return "change ok";
+	@PutMapping("/update")
+	public ResponseEntity<String> updateCardDate(HttpSession session,
+			@RequestBody Map<String,Object> cardData) {
+	
+		Integer memberNum = Integer.parseInt((String) cardData.get("member_num"));
+		String cardNum = (String)cardData.get("card_num");
+		
+		cardService.updateCardDate(memberNum, cardNum);
+		memberService.deductMemberPoint(memberNum);
+		
+		return ResponseEntity.ok("카드 업데이트 완료 되었습니다.");
 	}
 
 	// 카드 거래내역 가져오기
 	@GetMapping("/select")
-	public List<UseHistoryDto> CardHistory() {
-
-		return null;
+	public List<UseHistoryEntity> CardHistory(@RequestParam(value = "period", defaultValue = "all") String period,
+			@RequestHeader("member_num") Integer memberNum) {
+		List<UseHistoryEntity> useHistoryList = useHistoryService.getHistoryByPeriod(period, memberNum);
+		return useHistoryList;
 	}
 
 	@GetMapping("analysis")
 	public List<UseHistoryDto> UseHistory() {
+		
 		return null;
 	}
 

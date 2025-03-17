@@ -44,7 +44,13 @@ public class AccountController {
 
     // 저금통 상태(활성 여부) 변경
     @PutMapping("/close/{accountNum}")
-    public void update(@PathVariable int accountNum) {
-        accountService.update(accountNum);
+    public void close(@PathVariable int accountNum) {
+        accountService.close(accountNum);
+    }
+
+    // 저금통 상태(해지 요청) 변경
+    @PutMapping("/request/{accountNum}")
+    public void request(@PathVariable int accountNum, @RequestParam boolean request) {
+        accountService.request(accountNum, request);
     }
 }

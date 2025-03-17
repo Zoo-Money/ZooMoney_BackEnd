@@ -23,26 +23,30 @@ public class MemberController {
     private MemberService memberService;
 
     @PostMapping("/login")
-    public Map<String, String> login(@RequestParam("member_id") String member_id, @RequestParam ("member_pw")String member_pw, HttpSession session) {
+    public Map<String, Object> login(@RequestParam("member_id") String member_id, @RequestParam("member_pw") String member_pw, HttpSession session) {
         MemberEntity member = memberService.login(member_id, member_pw);
-        Map<String, String> response = new HashMap<>();
-
+        Map<String, Object> response = new HashMap<>();
         if (member != null) {
-            session.setAttribute("member_id", member.getMemberId());  
-            session.setAttribute("member_num", member.getMemberNum()); 
+            // 세션에 값 저장
+            session.setAttribute("member_id", member.getMemberId());
+            session.setAttribute("member_num", member.getMemberNum());
             session.setAttribute("member_phone", member.getMemberPhone());
-            session.setAttribute("member_point", member.getMemberPoint()); 
+            session.setAttribute("member_point", member.getMemberPoint());
             session.setAttribute("member_name", member.getMemberName());
-            session.setAttribute("member_type", member.getMemberName());
-            session.setAttribute("member_parent", member.getMemberName());
-
-
-            
+            session.setAttribute("member_type", member.getMemberType());
+            session.setAttribute("member_parent", member.getMemberParent());
+            // 로그인 성공 메시지와 함께 세션 정보를 응답으로 반환
             response.put("message", "로그인 성공");
+            response.put("member_id", member.getMemberId());
+            response.put("member_num", member.getMemberNum());
+            response.put("member_phone", member.getMemberPhone());
+            response.put("member_point", member.getMemberPoint());
+            response.put("member_name", member.getMemberName());
+            response.put("member_type", member.getMemberType());
+            response.put("member_parent", member.getMemberParent());
         } else {
             response.put("message", "로그인 실패");
         }
-
         return response;
     }
     
