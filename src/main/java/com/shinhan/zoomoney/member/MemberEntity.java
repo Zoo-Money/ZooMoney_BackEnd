@@ -22,7 +22,10 @@ public class MemberEntity {
     private String memberName;
     private String memberPhone;
     private String memberType;
-    private Integer memberParent;
+//    private Integer memberParent;
+    @ManyToOne
+    @JoinColumn(name="member_parent")
+    private MemberEntity memberParent;
     private Integer memberPoint;
     private String memberAccount;
 

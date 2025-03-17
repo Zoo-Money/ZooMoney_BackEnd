@@ -1,8 +1,10 @@
 package com.shinhan.zoomoney.contract;
 
-
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
@@ -10,100 +12,106 @@ import org.springframework.stereotype.Service;
 
 import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
-import com.itextpdf.text.Image; 
+import com.itextpdf.text.Element;
+import com.itextpdf.text.Font;
+import com.itextpdf.text.Image;
 import com.itextpdf.text.Paragraph;
-import com.itextpdf.text.Document;
-import com.itextpdf.text.DocumentException;
-import com.itextpdf.text.FontFactory;
-import com.itextpdf.text.Paragraph;
-import com.itextpdf.text.pdf.PdfWriter;
+import com.itextpdf.text.pdf.BaseFont;
+import com.itextpdf.text.pdf.PdfPCell;
+import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
 
 @Service
 public class PdfService {
-	
-//	//pdf 생성 메서드
-//	public String createContractPdf(int contractId, String childName, String contractContent, String parentSignature, String childSignature) {
-//		
-//		// 파일명에 계약서 id + 자녀이름 + 생성날짜 포함
-//		String fileName = String.format("contract_%d_%s_%s.pdf", contractId, childName.replaceAll("\\s",""), //공백제거
-//				LocalDate.now().format(DateTimeFormatter.ofPattern("yyyyMMdd"))
-//				);
-//		
-//		// 파일 저장 경로 설정!!!!!!??????????????????????????????????????????
-//		String filePath = "C:/contract_pdfs" + fileName;
-//		
-//		// PDF 생성 로직
-//		Document document = new Document();
-//		try {
-//			PdfWriter.getInstance(document, new FileOutputStream(filePath));
-//			document.open();
-//			
-//			//계약서 제목 추가
-//			document.add(new Paragraph("📝 용돈계약서", FontFactory.getFont(FontFactory.HELVETICA_BOLD, 20)));
-//			document.add(new Paragraph(" "));// 빈줄추가
-//			
-//			//계약서 내용 추가
-//			document.add(new Paragraph("계약내용 : " + contractContent ));
-//			document.add(new Paragraph("계약금액 : " + contractContent )); // 필요에 따라 수정가능
-//			document.add(new Paragraph("지급 방법: 현금 지급")); // 예시 추가
-//	        document.add(new Paragraph("계약 날짜: " + LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))));
-//	        
-//	        document.add(new Paragraph(" "));
-//            document.add(new Paragraph("👨‍👩‍👧‍👦 부모 서명: " + parentSignature));
-//            document.add(new Paragraph("👦 자녀 서명: " + childSignature));
-//			
-//		}
-//		catch(DocumentException | IOException e) {
-//		     e.printStackTrace();
-//	            return null;
-//		}
-//		finally {document.close();}
-//				
-//				
-//				
-//		return filePath; // 생성된 PDF 파일 경로 반환
-//	}
+
+	public String createContractPdf(int contractId, String childName, String contractContent,
+			String parentSignaturePath, String childSignaturePath) {
+
+		String fileName = String.format("contract_%d_%s_%s.pdf", contractId, childName.replaceAll("\\s", ""),
+				LocalDate.now().format(DateTimeFormatter.ofPattern("yyyyMMdd")));
+
+//		String filePath = "src/main/resources/contract_pdf/" + fileName;
+		String filePath = "src/main/resources/static/contract_pdf/" + fileName;
+
+		// 폴더가 없으면 생성
+		Path directoryPath = Paths.get("src/main/resources/static/contract_pdf/");
+		if (!Files.exists(directoryPath)) {
+			try {
+				Files.createDirectories(directoryPath);
+			} catch (IOException e) {
+				System.err.println(e.getMessage());
+			}
+		}
+
+		Document document = new Document();
+		try {
+			PdfWriter.getInstance(document, new FileOutputStream(filePath));
+			document.open();
+
+			// 폰트
+			BaseFont baseFont = BaseFont.createFont("src/main/resources/fonts/malgun.ttf", BaseFont.IDENTITY_H,
+					BaseFont.EMBEDDED);
+			Font titleFont = new Font(baseFont, 36, Font.BOLD);
+			Font contentFont = new Font(baseFont, 24, Font.NORMAL);
 
 
-    public String createContractPdf(int contractId, String childName, String contractContent, 
-                                    String parentSignaturePath, String childSignaturePath) {
+			// "용돈 계약서" 제목을 가운데 정렬
+			Paragraph title = new Paragraph("용돈 계약서", titleFont);
+			title.setAlignment(Element.ALIGN_CENTER); // 제목 가운데 정렬 추가
+			title.setSpacingAfter(30); // 제목과 본문 사이 간격 추가
+			document.add(title);
 
-        String fileName = String.format("contract_%d_%s_%s.pdf",
-            contractId,
-            childName.replaceAll("\\s", ""),
-            LocalDate.now().format(DateTimeFormatter.ofPattern("yyyyMMdd"))
-        );
+			// 계약 내용 추가
+			Paragraph content = new Paragraph("계약 내용: ", contentFont);
+			content.setAlignment(Element.ALIGN_LEFT); // 본문은 좌측 정렬
+			content.setSpacingAfter(30); // 본문과 다음 내용 간 간격 추가
+			document.add(content);
 
-        String filePath = "C:/contract_pdfs/" + fileName;
+			// 계약 내용을 줄바꿈 처리하여 추가
+			String[] contentLines = contractContent.split("\n");
+			for (String line : contentLines) {
+				Paragraph lineParagraph = new Paragraph(line, contentFont);
+				lineParagraph.setAlignment(Element.ALIGN_LEFT); // 좌측 정렬 유지
+				document.add(lineParagraph);
+			}
 
-        Document document = new Document();
-        try {
-            PdfWriter.getInstance(document, new FileOutputStream(filePath));
-            document.open();
+			// 추가 공백 (테이블과 계약 내용 사이 간격 추가)
+			document.add(new Paragraph("\n\n"));
 
-            document.add(new Paragraph("용돈 계약서"));
-            document.add(new Paragraph("계약 내용: " + contractContent));
 
-            // 부모 서명 이미지 추가
-            Image parentImage = Image.getInstance(parentSignaturePath);
-            parentImage.scaleToFit(150, 75);
-            document.add(new Paragraph("부모 서명:"));
-            document.add(parentImage);
+			// 부모 서명 & 자녀 서명을 한 줄에 추가 (테이블 사용)
+			PdfPTable table = new PdfPTable(2); // 🔹 2열 테이블 생성
+			table.setWidthPercentage(100); // 🔹 테이블 너비 설정
 
-            // 자녀 서명 이미지 추가
-            Image childImage = Image.getInstance(childSignaturePath);
-            childImage.scaleToFit(150, 75);
-            document.add(new Paragraph("자녀 서명:"));
-            document.add(childImage);
+			PdfPCell parentCell = new PdfPCell();
+			parentCell.addElement(new Paragraph("부모 서명:", contentFont));
+			Image parentImage = Image.getInstance(parentSignaturePath);
+			parentImage.scaleToFit(100, 50);
+			parentCell.addElement(parentImage);
+			// parentCell.setBorder(Rectangle.NO_BORDER); // 🔹 테두리 제거
 
-        } catch (DocumentException | IOException e) {
-            e.printStackTrace();
-            return null;
-        } finally {
-            document.close();
-        }
+			PdfPCell childCell = new PdfPCell();
+			childCell.addElement(new Paragraph("자녀 서명:", contentFont));
+			Image childImage = Image.getInstance(childSignaturePath);
+			childImage.scaleToFit(100, 50);
+			childCell.addElement(childImage);
+			// childCell.setBorder(Rectangle.NO_BORDER); // 🔹 테두리 제거
 
-        return filePath;
-    }
+			table.addCell(parentCell);
+			table.addCell(childCell);
+
+			document.add(table); // 🔹 최종적으로 테이블 추가
+
+		} catch (DocumentException | IOException e) {
+			e.printStackTrace();
+			return null;
+		} finally {
+			document.close();
+		}
+
+//		return filePath; 
+//		return "/contract/pdf/" + fileName;  // ✅ API에서 접근 가능한 경로로 변경
+		 return fileName; // ✅ 파일명만 반환하도록 변경
+
+	}
 }

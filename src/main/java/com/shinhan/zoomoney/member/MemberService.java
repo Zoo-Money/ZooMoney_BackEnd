@@ -18,4 +18,9 @@ public class MemberService {
     public List<MemberEntity> selectByMemberNum(int member_num) {
         return memberRepository.findByMemberNum(member_num);
     }
+    public String getMemberAccount(String memberId) {
+    	   return memberRepository.findByMemberId(memberId)
+                   .map(MemberEntity::getMemberAccount)
+                   .orElse("계좌 정보가 없습니다.");
+       }
 }

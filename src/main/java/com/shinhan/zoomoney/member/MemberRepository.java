@@ -12,6 +12,11 @@ public interface MemberRepository extends JpaRepository<MemberEntity, Integer> {
 	//등록된 카드 가져오기
 	List<MemberEntity> findByMemberNum(int memberNum);
 	 
-    // 부모 ID 조회 메서드 추가
+    // 부모 ID 조회 
     Optional<MemberEntity> findByMemberId(String memberId);
+    
+    // 부모의 아이들 조회
+    List<MemberEntity> findByMemberParent(MemberEntity memberParent);
+    
+ 
 }
