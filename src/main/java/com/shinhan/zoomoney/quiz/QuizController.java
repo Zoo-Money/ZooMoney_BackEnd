@@ -1,6 +1,7 @@
 package com.shinhan.zoomoney.quiz;
 
 import java.util.Collections;
+import java.util.List;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -61,7 +62,18 @@ public class QuizController {
     public ResponseEntity<?> getCorrectAnswerCount(){
     	int memberNum = 8; // 테스트용 고정값
     	int correctAnswerCount = quizService.howManyCorrectAnswer(memberNum);
+    	
     	return ResponseEntity.ok(Collections.singletonMap("correctAnswerCount", correctAnswerCount));
+    }
+    
+    // ✅ 오늘 푼 퀴즈 정답 여부 리스트 가져오기
+    @GetMapping("/answerlist")
+    public ResponseEntity<?> getTodayAnswerList() {
+        int memberNum = 8; // 테스트용 고정값
+        List<Integer> answerList = quizService.todayAnswerList(memberNum);
+
+        return ResponseEntity.ok(Collections.singletonMap("answerList", answerList));
+        
     }
     
 }
