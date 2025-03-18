@@ -1,6 +1,12 @@
 package com.shinhan.zoomoney.stock;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
+import java.io.IOException;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -8,14 +14,10 @@ import org.springframework.web.socket.CloseStatus;
 import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketSession;
 import org.springframework.web.socket.handler.TextWebSocketHandler;
-import reactor.core.publisher.Flux;
 
-import java.io.IOException;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import reactor.core.publisher.Flux;
 
 @Component
 public class MyWebSocketHandler extends TextWebSocketHandler {
@@ -39,9 +41,7 @@ public class MyWebSocketHandler extends TextWebSocketHandler {
 
     public void afterConnectionEstablished(WebSocketSession session) {
         String sessionKey = session.getId();
-        System.out.println("WebSocket 연결됨: " + sessionKey);
         sessions.put(sessionKey, session);
-        System.out.println(sessions);
         // 주기적으로 데이터 전송 (1초마다)
         executor.scheduleAtFixedRate(() -> {
             // 세션의 tr_key를 기반으로 API 요청
@@ -58,8 +58,8 @@ public class MyWebSocketHandler extends TextWebSocketHandler {
     @Override
     public void afterConnectionClosed(WebSocketSession session, CloseStatus status) {
         sessions.remove(session.getId());
-        System.out.println("WebSocket 연결 종료: " + session.getId());
     }
+
     @Override
     protected void handleTextMessage(WebSocketSession session, TextMessage message) throws Exception {
         // 메시지에서 tr_key를 추출
@@ -69,27 +69,24 @@ public class MyWebSocketHandler extends TextWebSocketHandler {
         String trKey = messageData.get("symbol");
 
         if (trKey != null) {
-            session.getAttributes().put("tr_key", trKey);  // 세션에 tr_key 저장
-            System.out.println("tr_key received: " + trKey);
+            session.getAttributes().put("tr_key", trKey); // 세션에 tr_key 저장
         } else {
             System.err.println("tr_key가 메시지에 없습니다.");
         }
     }
 
     private Flux<String> fetchStockData(String stockCode) {
-        if (sessions.size()==1) {
+        if (sessions.size() == 1) {
             approvalKey = approvalKeyService.getApprovalKeySync(app_key, secret_key);
         }
-        System.out.println("approvalKey : "+approvalKey);
         return service.subscribeRealTimePrice(approvalKey, stockCode);
     }
 
     private void sendToAll(String message) {
-        System.out.println("접속된 session 수 : "+sessions.size());
         for (WebSocketSession session : sessions.values()) {
             if (session.isOpen()) {
                 try {
-                    synchronized (session) {  // :작은_파란색_다이아몬드: 동기화하여 하나의 메시지씩 전송
+                    synchronized (session) { // :작은_파란색_다이아몬드: 동기화하여 하나의 메시지씩 전송
                         session.sendMessage(new TextMessage(message));
                     }
                 } catch (IOException | IllegalStateException e) {
