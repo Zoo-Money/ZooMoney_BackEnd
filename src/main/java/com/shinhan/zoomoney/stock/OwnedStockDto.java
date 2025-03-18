@@ -10,4 +10,7 @@ public class OwnedStockDto {
     private int quantity;
     private double averagePrice;
     private double totalValue;
+    private int stockhistPrice;
+    private int stockPrice;
+    
 }

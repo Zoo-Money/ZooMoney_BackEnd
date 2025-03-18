@@ -107,17 +107,20 @@ public class StockService {
 		 return "매도 완료";
 	 }
 	 
-	// 보유한 주식 조회
+	// 사용자의 보유 주식 정보 조회
 	 @Transactional(readOnly = true)
 	    public List<OwnedStockDto> getOwnedStocksByMember(int memberNum) {
 	        List<Object[]> resultList = stockHistoryRepository.getOwnedStocks(memberNum);
 
 	        return resultList.stream()
 	                .map(obj -> new OwnedStockDto(
-	                        (String) obj[0],   // 주식명
+	                		(String) obj[0],   // 주식명
 	                        ((Number) obj[1]).intValue(),  // 보유 주식 수량
 	                        ((Number) obj[2]).doubleValue(), // 평균 매수 가격
-	                        ((Number) obj[1]).intValue() * ((Number) obj[2]).doubleValue() // 총 가치
+	                        ((Number) obj[1]).intValue() * ((Number) obj[3]).doubleValue(), // 총 가치 (보유량 * 현재 주가)
+	                        ((Number) obj[3]).intValue(),  // 현재 주가
+	                        ((Number) obj[4]).intValue()   // 최근 거래 가격
+	                        
 	                ))
 	                .collect(Collectors.toList());
 	    }
