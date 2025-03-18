@@ -26,12 +26,13 @@ public class StockNewsService {
 
 	@Autowired
 	StockNewsRepository stockNewsRepo;
-	
+
 	public String getStockName(String stockName) {
 		String query = stockName + "주식";
 		StockEntity stockentity = stockNewsRepo.findByStockName(stockName);
 		return (stockentity != null) ? query : null;
 	}
+
 	public String searchNews(String query) {
 		String text = encodedQuery(query);
 		String apiURL = "https://openapi.naver.com/v1/search/news?query=" + text;
@@ -39,7 +40,7 @@ public class StockNewsService {
 		Map<String, String> requestHeaders = new HashMap<>();
 		requestHeaders.put("X-Naver-Client-Id", clientId);
 		requestHeaders.put("X-Naver-Client-Secret", clientSecret);
-		//System.out.println(clientId + clientSecret);
+
 		return get(apiURL, requestHeaders);
 	}
 
@@ -102,4 +103,3 @@ public class StockNewsService {
 		}
 	}
 }
-

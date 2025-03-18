@@ -28,7 +28,6 @@ public class StockChartController {
 	@GetMapping("/chart")
 	public ResponseEntity<List<Map<String,Object>>> getTop30Stock(){
 		List<Map<String, Object>> stockData = stockChartService.getTopStocks();
-		System.out.println("실행");
 		return ResponseEntity.ok(stockData);
 	}
 	
