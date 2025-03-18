@@ -45,7 +45,7 @@ public class CardController {
 	}
 
 	@GetMapping("/get")
-	public ResponseEntity<?> getCardInfo(HttpSession session, @RequestHeader("member_num") Integer memberNum) {
+	public ResponseEntity<?> getCardInfo(HttpSession session, @RequestParam("member_num") Integer memberNum) {
 		// 해당 회원의 카드 목록 조회
 		CardEntity memberCards = cardService.getCardsByMemberNum(memberNum);
 
