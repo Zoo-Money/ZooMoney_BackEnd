@@ -15,6 +15,7 @@ import lombok.NoArgsConstructor;
 public class MemberEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    
     private int memberNum;
 
     private String memberId;
@@ -22,7 +23,10 @@ public class MemberEntity {
     private String memberName;
     private String memberPhone;
     private String memberType;
-    private Integer memberParent;
+//    private Integer memberParent;
+    @ManyToOne
+    @JoinColumn(name="member_parent")
+    private MemberEntity memberParent;
     private Integer memberPoint;
     private String memberAccount;
 

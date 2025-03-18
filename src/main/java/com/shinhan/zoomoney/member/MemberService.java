@@ -19,6 +19,8 @@ public class MemberService {
     public List<MemberEntity> selectByMemberNum(int member_num) {
         return memberRepository.findByMemberNum(member_num);
     }
+
+
     //카드 이미지 변경시 포인트 차감
     public void deductMemberPoint(Integer memberNum) {
         // memberNum이 null인 경우 예외 처리
@@ -47,4 +49,11 @@ public class MemberService {
             throw new IllegalArgumentException("해당 회원을 찾을 수 없습니다.");
         }
     }
+    
+    public String getMemberAccount(String memberId) {
+    	   return memberRepository.findByMemberId(memberId)
+                   .map(MemberEntity::getMemberAccount)
+                   .orElse("계좌 정보가 없습니다.");
+       }
+    
 }

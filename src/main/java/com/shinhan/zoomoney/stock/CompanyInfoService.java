@@ -1,10 +1,5 @@
 package com.shinhan.zoomoney.stock;
 
-import org.springframework.stereotype.Service;
-
-import io.github.bonigarcia.wdm.WebDriverManager;
-
-import java.io.File;
 import java.time.Duration;
 
 import org.openqa.selenium.By;
@@ -15,15 +10,18 @@ import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
+import org.springframework.stereotype.Service;
+
+import io.github.bonigarcia.wdm.WebDriverManager;
 
 @Service
 public class CompanyInfoService {
-	
-	public String getCompanyInfo(String stockCode) {
+
+    public String getCompanyInfo(String stockCode) {
         WebDriverManager.chromedriver().setup();
         ChromeOptions options = new ChromeOptions();
         // UI 없이 실행
-        options.addArguments("--headless");  
+        options.addArguments("--headless");
         options.addArguments("--disable-gpu");
         options.addArguments("--no-sandbox");
 
@@ -44,16 +42,15 @@ public class CompanyInfoService {
 
             // 크롤링 결과 출력
             String companyDescription = companyInfo.getText();
-            System.out.println("크롤링 결과: " + companyDescription);
-            
+
             return companyDescription;
 
         } catch (Exception e) {
             e.printStackTrace();
             return "크롤링 실패";
         } finally {
-        	// 실행 종료
-            driver.quit(); 
+            // 실행 종료
+            driver.quit();
         }
     }
 }
