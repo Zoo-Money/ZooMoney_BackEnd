@@ -35,6 +35,7 @@ public class CardService {
         card.setCardMetadata(cardMetadata);
         card.setCardMoney(cardMoney);
         card.setMember(member); // MemberEntity와 연결
+
         return cardRepository.save(card);
     }
 
@@ -48,14 +49,15 @@ public class CardService {
             cardRepository.save(entity);
         }
     }
-    public void updateCardDate(Integer memberNum,String cardNum) {
-        // memberNum으로 카드 조회 
-        CardEntity card = cardRepository.findByMemberMemberNumAndCardNum(memberNum,cardNum);
+
+    public void updateCardDate(Integer memberNum, String cardNum) {
+        // memberNum으로 카드 조회
+        CardEntity card = cardRepository.findByMemberMemberNumAndCardNum(memberNum, cardNum);
         if (card != null) {
             // cardUpdate 필드를 현재 날짜로 업데이트
             card.setCardUpdate(new Date());
             cardRepository.save(card);
         }
     }
-    
+
 }
