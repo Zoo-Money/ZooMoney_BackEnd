@@ -1,17 +1,19 @@
 package com.shinhan.zoomoney.stock;
 
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import java.net.URI;
+import java.util.Map;
+
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.socket.WebSocketMessage;
 import org.springframework.web.reactive.socket.client.ReactorNettyWebSocketClient;
 import org.springframework.web.reactive.socket.client.WebSocketClient;
+
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
-
-import java.net.URI;
-import java.util.Map;
 
 @Service
 public class RealTimePriceService {
@@ -42,14 +44,11 @@ public class RealTimePriceService {
                                     )
                             ));
 
-                            System.out.println("Request JSON: " + jsonMessage);
-
                             // 메시지 전송
                             return session.send(Mono.just(session.textMessage(jsonMessage)))
                                     .thenMany(session.receive()
                                             .map(WebSocketMessage::getPayloadAsText)
                                             .doOnNext(response -> {
-                                                System.out.println("Received22: " + response);
                                                 sink.next(response); // Flux<String>에 데이터 전송
                                             })
                                             .doOnError(sink::error) // 에러 발생 시 sink.error 호출
@@ -66,11 +65,8 @@ public class RealTimePriceService {
     }
     public Mono<Void> unsubscribeRealTimePrice(String approvalKey, String stockCode) {
         if (approvalKey == null || approvalKey.isEmpty() || stockCode == null || stockCode.isEmpty()) {
-            System.out.println("[ERROR] 구독 해제 실패: approvalKey 또는 종목 코드가 없음");
             return Mono.error(new IllegalArgumentException("approvalKey 또는 종목 코드가 없습니다"));
         }
-
-        System.out.println("[DEBUG] unsubscribeRealTimePrice() 호출됨 - approvalKey: " + approvalKey + ", 종목코드: " + stockCode);
 
         try {
             String jsonMessage = objectMapper.writeValueAsString(Map.of(
@@ -88,20 +84,16 @@ public class RealTimePriceService {
                     )
             ));
 
-            System.out.println("[DEBUG] Unsubscribe Request JSON: " + jsonMessage);
-
             // WebSocket 클라이언트를 사용하여 구독 해제 메시지 전송 및 응답 처리
             return webSocketClient.execute(
                     URI.create(WEBSOCKET_URL),
                     session -> session.send(Mono.just(session.textMessage(jsonMessage)))  // 메시지 전송
                             .thenMany(session.receive()  // 응답을 받고 처리
                                     .map(WebSocketMessage::getPayloadAsText)
-                                    .doOnNext(response -> System.out.println("[DEBUG] Unsubscribe Response: " + response))
                             )
                             .then()  // 작업 완료 후
             ).then();
         } catch (JsonProcessingException e) {
-            System.out.println("[ERROR] JSON 변환 오류: " + e.getMessage());
             return Mono.error(e);  // JSON 변환 오류 시 에러 반환
         }
     }

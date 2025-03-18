@@ -2,20 +2,15 @@ package com.shinhan.zoomoney.contract;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 
 import com.shinhan.zoomoney.card.CardEntity;
 import com.shinhan.zoomoney.card.CardRepository;
 import com.shinhan.zoomoney.member.MemberEntity;
 import com.shinhan.zoomoney.member.MemberRepository;
-import java.util.Optional;
 
 @Service
 public class ContractService {
@@ -58,17 +53,11 @@ public class ContractService {
 		return "초안 저장 완료";
 	}
 
-	
 	// 자녀가 서명 후 최종 계약서 생성 (PDF 생성)
 	public String completeContract(int childNum, String childSignature) {
-//		System.out.println("✅ 전달받은 childNum: " + childNum);
-
 		ContractEntity contract = contractRepository
 				.findFirstByMember_MemberNumAndContractStatusOrderByContractNumDesc(childNum, false)
 				.orElseThrow(() -> new RuntimeException("계약서를 찾을 수 없습니다."));
-
-//		System.out.println("✅ 조회된 계약서: " + contract);
-//		System.out.println("✅ 서비스 [completeContract] 계약 내용: " + contract.getContractContent());
 
 		// 자녀정보 조회
 		MemberEntity child = memberRepository.findById(childNum)
@@ -82,19 +71,18 @@ public class ContractService {
 		// PDF 생성 (부모 서명 + 자녀 서명 포함)
 		String fileName = pdfService.createContractPdf(contract.getContractNum(), contract.getMember().getMemberName(),
 				contract.getContractContent(), contract.getContractImgpath(), childSignaturePath);
-		
+
 		///////////// 03.16 21:34
 		// API 경로로 변경 (프론트엔드에서 접근 가능하도록 설정)
 		String filePath = "/contract_pdf/" + fileName;
-		
+
 		// DB 업데이트 (PDF 경로 및 계약 상태)
 		contract.setContractFilepath(filePath); // PDF 파일 경로 저장
 		contract.setContractStatus(true); // 최종 계약 완료 상태
 		contract.setContractExcelpath(childSignaturePath); // 자녀 서명 이미지 경로 저장
 		contractRepository.save(contract);
 
-//		System.out.println("@@@@@@@@" + filePath);
-//        contract.setContractFilepath(filePath);         // ✅ 프론트엔드에서 접근할 수 있는 경로 저장
+		// contract.setContractFilepath(filePath); // ✅ 프론트엔드에서 접근할 수 있는 경로 저장
 
 		return "계약이 최종 완료되었습니다.";
 	}
