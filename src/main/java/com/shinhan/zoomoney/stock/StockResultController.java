@@ -12,20 +12,17 @@ import jakarta.servlet.http.HttpSession;
 
 @RestController
 @RequestMapping("/stock/result")
-public class StockHistoryController {
+public class StockResultController {
 
 	@Autowired
-	StockHistoryService historyService;
+	StockResultService resultService;
 	
 	@GetMapping("/list")
 	public List<StockResultDto> selectAllResult(HttpSession session){
-		//테스트용 세션 추가 - 추후 지우기
-		session.setAttribute("memberNum", 1);
 		Integer memberNum = (Integer) session.getAttribute("memberNum");
 		if (memberNum == null) {
-	        // 세션에 memberNum이 없다면 에러 처리
-	        return new ArrayList<>(); // 빈 리스트 반환 (또는 적절한 응답)
+	        return new ArrayList<>(); // 빈 리스트 반환
 	    }
-		return historyService.selectAllByMemberNum(memberNum);
+		return resultService.selectAllByMemberNum(memberNum);
 	}
 }

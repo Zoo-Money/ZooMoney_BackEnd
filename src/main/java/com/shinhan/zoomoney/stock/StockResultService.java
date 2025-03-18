@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
-public class StockHistoryService {
+public class StockResultService {
 	
 	@Autowired
 	StockResultRepository resultRepo;
