@@ -105,7 +105,7 @@ public class StockChartService {
         return stockRepository.findAll().stream()
                 .map(stock -> StockDto.fromEntity(
                         stock,
-                        companyInfoService.getCompanyInfo(stock.getStockId())))
+                        stock.getStockInfo()))
                 .collect(Collectors.toList());
     }
 
