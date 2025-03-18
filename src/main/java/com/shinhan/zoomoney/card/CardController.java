@@ -1,6 +1,5 @@
 package com.shinhan.zoomoney.card;
 
-import java.lang.reflect.Member;
 import java.util.List;
 import java.util.Map;
 
@@ -29,7 +28,7 @@ public class CardController {
 
 	@Autowired
 	private UseHistoryService useHistoryService;
-	
+
 	@Autowired
 	private MemberService memberService;
 
@@ -37,7 +36,6 @@ public class CardController {
 	@PostMapping("/create")
 	public String createCard(@RequestBody Map<String, Object> cardInfo) {
 		try {
-			System.out.println(cardInfo);
 			cardService.createCard(cardInfo);
 			return "카드 정보가 성공적으로 저장되었습니다.";
 		} catch (Exception e) {
@@ -47,7 +45,7 @@ public class CardController {
 	}
 
 	@GetMapping("/get")
-	public ResponseEntity<?> getCardInfo(HttpSession session,@RequestHeader("member_num") Integer memberNum) {
+	public ResponseEntity<?> getCardInfo(HttpSession session, @RequestHeader("member_num") Integer memberNum) {
 		// 해당 회원의 카드 목록 조회
 		CardEntity memberCards = cardService.getCardsByMemberNum(memberNum);
 
@@ -59,17 +57,18 @@ public class CardController {
 
 		return ResponseEntity.ok(memberCards);
 	}
+
 	// 카드 이미지 변경
 	@PutMapping("/update")
 	public ResponseEntity<String> updateCardDate(HttpSession session,
-			@RequestBody Map<String,Object> cardData) {
-	
+			@RequestBody Map<String, Object> cardData) {
+
 		Integer memberNum = Integer.parseInt((String) cardData.get("member_num"));
-		String cardNum = (String)cardData.get("card_num");
-		
+		String cardNum = (String) cardData.get("card_num");
+
 		cardService.updateCardDate(memberNum, cardNum);
 		memberService.deductMemberPoint(memberNum);
-		
+
 		return ResponseEntity.ok("카드 업데이트 완료 되었습니다.");
 	}
 
@@ -83,7 +82,7 @@ public class CardController {
 
 	@GetMapping("analysis")
 	public List<UseHistoryDto> UseHistory() {
-		
+
 		return null;
 	}
 
