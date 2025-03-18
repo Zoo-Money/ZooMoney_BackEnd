@@ -17,18 +17,21 @@ import jakarta.transaction.Transactional;
 
 @Service
 public class StockChartService {
+
     private final RestTemplate restTemplate = new RestTemplate();
     private final StockChartTokenService tokenService;
     private final StockChartRepository stockRepository;
     private final CompanyInfoService companyInfoService;
 
-    @Value("${stock.api.key}")
-    private String apiKey;
-
-    @Value("${stock.api.secret}")
-    private String apiSecret;
-
-    // API URL (시가총액 기준 TOP 30개만 가져올 수 있음)
+	
+	@Value("${stock.api.key}")
+	private String apiKey;
+	
+	@Value("${stock.api.secret}")
+	private String apiSecret;
+	
+	
+	// API URL (시가총액 기준 TOP 30개만 가져올 수 있음)
     private static final String apiUrl = "https://openapi.koreainvestment.com:9443/uapi/domestic-stock/v1/ranking/market-cap";
 
     public StockChartService(StockChartTokenService tokenService, StockChartRepository stockRepository,
@@ -102,7 +105,7 @@ public class StockChartService {
         return stockRepository.findAll().stream()
                 .map(stock -> StockDto.fromEntity(
                         stock,
-                        companyInfoService.getCompanyInfo(stock.getStockId())))
+                        stock.getStockInfo()))
                 .collect(Collectors.toList());
     }
 
