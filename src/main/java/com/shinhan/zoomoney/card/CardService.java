@@ -35,7 +35,6 @@ public class CardService {
         card.setCardMetadata(cardMetadata);
         card.setCardMoney(cardMoney);
         card.setMember(member); // MemberEntity와 연결
-        System.out.println(card);
         return cardRepository.save(card);
     }
 
