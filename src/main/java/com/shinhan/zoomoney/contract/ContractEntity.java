@@ -1,6 +1,8 @@
 package com.shinhan.zoomoney.contract;
 
-import java.util.Date;
+
+
+import java.time.LocalDate;
 
 import com.shinhan.zoomoney.member.MemberEntity;
 
@@ -33,9 +35,9 @@ public class ContractEntity {
     private MemberEntity member;
 
     private int contractMoney;
-    private Date contractDate;
+    private LocalDate contractDate;
     private boolean contractStatus;
-    private Date contractProvide;
+    private LocalDate contractProvide;
     private String contractContent;
     private String contractFilepath;
     private String contractImgpath;

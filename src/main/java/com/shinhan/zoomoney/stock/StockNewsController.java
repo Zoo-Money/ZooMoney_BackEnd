@@ -16,7 +16,7 @@ public class StockNewsController {
 	
 	//관련 뉴스 목록 가져오기
 	@GetMapping("/getnews/{stockName}")
-	public String searchNews(@PathVariable String stockName) {
+	public String searchNews(@PathVariable("stockName") String stockName) {
 		String query = newsServiece.getStockName(stockName);
 		if(query != null) {
 			return newsServiece.searchNews(query);		

@@ -46,9 +46,20 @@ dependencies {
     implementation 'org.seleniumhq.selenium:selenium-remote-driver:4.25.0'
     implementation 'org.seleniumhq.selenium:selenium-support:4.25.0'
 
+	implementation group: 'org.modelmapper', name: 'modelmapper', version: '2.3.8'
+	implementation 'com.itextpdf:itextpdf:5.5.13.2'
+	
     // ✅ WebDriverManager 추가 (자동 ChromeDriver 설정)
     implementation 'io.github.bonigarcia:webdrivermanager:5.7.0'
+
+	// ✅ 웹소캣
+	implementation 'org.springframework.boot:spring-boot-starter-websocket'
+	implementation 'org.springframework.boot:spring-boot-starter-webflux'
+	implementation 'org.springframework:spring-websocket'
 }
 tasks.named('test') {
 	useJUnitPlatform()
+}
+tasks.withType(JavaCompile) {
+	options.compilerArgs << '-parameters'
 }
