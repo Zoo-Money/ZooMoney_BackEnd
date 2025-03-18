@@ -75,7 +75,7 @@ public class CardController {
 	// 카드 거래내역 가져오기
 	@GetMapping("/select")
 	public List<UseHistoryEntity> CardHistory(@RequestParam(value = "period", defaultValue = "all") String period,
-			@RequestHeader("member_num") Integer memberNum) {
+											  @RequestParam(value = "memberNum") Integer memberNum) {
 		List<UseHistoryEntity> useHistoryList = useHistoryService.getHistoryByPeriod(period, memberNum);
 		return useHistoryList;
 	}
