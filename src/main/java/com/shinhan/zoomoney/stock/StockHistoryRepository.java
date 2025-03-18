@@ -39,6 +39,6 @@ public interface StockHistoryRepository extends JpaRepository<StockHistoryEntity
 	           "HAVING (SUM(CASE WHEN sh.stockhistType = '1' THEN sh.stockhistAmount ELSE 0 END) - " +
 	           "        SUM(CASE WHEN sh.stockhistType = '2' THEN sh.stockhistAmount ELSE 0 END)) > 0")
 	    List<Object[]> getOwnedStocks(@Param("memberNum") int memberNum);
-	    List<StockHistoryEntity> findByMember_MemberNum(Integer memberNum);
+	    List<StockHistoryEntity> findByMember_MemberNum(int memberNum);
 
 }
