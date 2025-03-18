@@ -9,6 +9,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -18,6 +19,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
+// 클라이언트 도메인 허용 (CORS 설정)
+@CrossOrigin(origins = "http://localhost:3000")
 @RestController
 @RequestMapping("/notify")
 public class NotifyController {
@@ -25,7 +28,7 @@ public class NotifyController {
     private NotifyService notifyService;
 
     // Thread-Safe한 SSE 연결을 관리하는 자료구조
-    private Map<Integer, SseEmitter> emitterMap = new ConcurrentHashMap<>(); 
+    private Map<Integer, SseEmitter> emitterMap = new ConcurrentHashMap<>();
 
     private static final Long TIMEOUT = 30 * 60 * 1000L; // 30분 유지
 

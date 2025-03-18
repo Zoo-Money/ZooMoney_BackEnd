@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -75,7 +74,7 @@ public class CardController {
 	// 카드 거래내역 가져오기
 	@GetMapping("/select")
 	public List<UseHistoryEntity> CardHistory(@RequestParam(value = "period", defaultValue = "all") String period,
-											  @RequestParam(value = "memberNum") Integer memberNum) {
+			@RequestParam(value = "memberNum") Integer memberNum) {
 		List<UseHistoryEntity> useHistoryList = useHistoryService.getHistoryByPeriod(period, memberNum);
 		return useHistoryList;
 	}
