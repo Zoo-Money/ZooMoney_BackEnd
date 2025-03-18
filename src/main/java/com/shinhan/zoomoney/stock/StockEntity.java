@@ -21,4 +21,5 @@ public class StockEntity {
     private String stockName;
     private String stockId;
     private String stockInfo;
+    private int stockPrice;
 }
