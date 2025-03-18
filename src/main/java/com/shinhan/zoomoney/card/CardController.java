@@ -1,6 +1,5 @@
 package com.shinhan.zoomoney.card;
 
-import java.lang.reflect.Member;
 import java.util.List;
 import java.util.Map;
 
@@ -37,7 +36,6 @@ public class CardController {
 	@PostMapping("/create")
 	public String createCard(@RequestBody Map<String, Object> cardInfo) {
 		try {
-			System.out.println(cardInfo);
 			cardService.createCard(cardInfo);
 			return "카드 정보가 성공적으로 저장되었습니다.";
 		} catch (Exception e) {
