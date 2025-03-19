@@ -28,8 +28,5 @@ public class StockMoneyEntity {
     @OneToOne 
     @JoinColumn(name = "member_num")
     MemberEntity  member;
-    
-    
-    
     private int stockmoneyTotal;
 }
