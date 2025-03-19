@@ -29,7 +29,7 @@ public class StockService {
 
 	// 매수
 	@Transactional
-	public String buyStock(int memberNum, int stockNum, int amount, int price) {
+	public String buyStock(int memberNum, String stockId, int amount, int price) {
 
 		int totalPrice = amount * price;
 		StockMoneyEntity stockMoney = stockMoneyRepository.findById(memberNum).orElse(null);
@@ -43,7 +43,7 @@ public class StockService {
 		
 
 		// 매수한 주식 정보 가져오기
-		StockEntity stock = stockChartRepository.findById(stockNum).orElse(null);
+		StockEntity stock = stockChartRepository.findByStockId(stockId).orElse(null);
 		if (stock == null) {
 			return "해당 주식 정보를 찾을 수 없습니다.";
 		}
@@ -66,18 +66,18 @@ public class StockService {
 	}
 	
 	 // 매도
-	 public String sellStock(int memberNum, int stockNum, int amount, int price) {
+	 public String sellStock(int memberNum, String stockId, int amount, int price) {
 		 // 회원 정보 가져오기
 		 MemberEntity member = memberRepository.findById(memberNum)
 				 .orElseThrow(() -> new IllegalArgumentException("회원 정보를 찾을 수 없습니다."));
 		 
 		 // 주식 정보 가져오기
-		 StockEntity stock = stockChartRepository.findById(stockNum)
+		 StockEntity stock = stockChartRepository.findByStockId(stockId)
 				 .orElseThrow(() -> new IllegalArgumentException("해당 주식을 찾을 수 없습니다."));
 		 
 		 // 사용자의 보유 주식 계산
-		 Integer totalBuyAmount = stockHistoryRepository.getTotalStockAmount(memberNum, stockNum, "1");
-		 Integer totalSellAmount = stockHistoryRepository.getTotalStockAmount(memberNum, stockNum, "2");
+		 Integer totalBuyAmount = stockHistoryRepository.getTotalStockAmount(memberNum, stockId, "1");
+		 Integer totalSellAmount = stockHistoryRepository.getTotalStockAmount(memberNum, stockId, "2");
 		 
 		 int ownedAmount = (totalBuyAmount != null ? totalBuyAmount : 0) - (totalSellAmount != null ? totalSellAmount : 0);
 
@@ -109,21 +109,21 @@ public class StockService {
 	 
 	// 사용자의 보유 주식 정보 조회
 	 @Transactional(readOnly = true)
-	    public List<OwnedStockDto> getOwnedStocksByMember(int memberNum) {
-	        List<Object[]> resultList = stockHistoryRepository.getOwnedStocks(memberNum);
+	 public List<OwnedStockDto> getOwnedStocksByMember(int memberNum) {
+		    List<Object[]> resultList = stockHistoryRepository.getOwnedStocks(memberNum);
 
-	        return resultList.stream()
-	                .map(obj -> new OwnedStockDto(
-	                		(String) obj[0],   // 주식명
-	                        ((Number) obj[1]).intValue(),  // 보유 주식 수량
-	                        ((Number) obj[2]).doubleValue(), // 평균 매수 가격
-	                        ((Number) obj[1]).intValue() * ((Number) obj[3]).doubleValue(), // 총 가치 (보유량 * 현재 주가)
-	                        ((Number) obj[3]).intValue(),  // 현재 주가
-	                        ((Number) obj[4]).intValue()   // 최근 거래 가격
-	                        
-	                ))
-	                .collect(Collectors.toList());
-	    }
+		    return resultList.stream()
+		            .map(obj -> new OwnedStockDto(
+		                    (String) obj[0],  // stockId
+		                    (String) obj[1],  // stockName
+		                    ((Number) obj[2]).intValue(),  // 보유 주식 수량
+		                    ((Number) obj[3]).doubleValue(), // 평균 매수 가격
+		                    ((Number) obj[2]).intValue() * ((Number) obj[4]).doubleValue(), // 총 가치 (보유량 * 현재 주가)
+		                    ((Number) obj[4]).intValue(),  // 현재 주가
+		                    ((Number) obj[5]).intValue()   // 최근 거래 가격
+		            ))
+		            .collect(Collectors.toList());
+		}
 	 
 	 
 	// 모든 멤버에게 1000000원 충전
