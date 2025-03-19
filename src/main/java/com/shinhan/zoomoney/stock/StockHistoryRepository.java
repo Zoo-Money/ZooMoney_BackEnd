@@ -25,7 +25,7 @@ public interface StockHistoryRepository extends JpaRepository<StockHistoryEntity
 
 	 
 	// 특정 회원이 보유한 주식별 개수, 평균 매수가격, 총 가치 조회
-	@Query("SELECT s.stockId, s.stockName, " +
+	@Query("SELECT s.stockName,s.stockId, " +
 		       "SUM(sh.stockhistAmount) AS totalAmount, " +
 		       "AVG(sh.stockhistPrice) AS avgPrice, " +
 		       "s.stockPrice, " +

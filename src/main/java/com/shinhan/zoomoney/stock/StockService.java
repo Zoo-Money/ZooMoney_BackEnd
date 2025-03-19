@@ -114,8 +114,9 @@ public class StockService {
 
 		    return resultList.stream()
 		            .map(obj -> new OwnedStockDto(
-		                    (String) obj[0],  // stockId
-		                    (String) obj[1],  // stockName
+		            		(String) obj[0],  // stockName
+		                    (String) obj[1],  // stockId
+		                    
 		                    ((Number) obj[2]).intValue(),  // 보유 주식 수량
 		                    ((Number) obj[3]).doubleValue(), // 평균 매수 가격
 		                    ((Number) obj[2]).intValue() * ((Number) obj[4]).doubleValue(), // 총 가치 (보유량 * 현재 주가)
