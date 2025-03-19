@@ -56,4 +56,10 @@ public class MemberService {
                    .orElse("계좌 정보가 없습니다.");
        }
     
+    // 포인트 조회
+    public Integer getMemberPoint(int memberNum) {
+        return memberRepository.findMemberPointByMemberNum(memberNum);
+    }
+
+    
 }
