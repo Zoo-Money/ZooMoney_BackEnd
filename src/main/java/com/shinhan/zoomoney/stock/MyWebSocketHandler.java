@@ -16,6 +16,8 @@ import org.springframework.web.socket.WebSocketSession;
 import org.springframework.web.socket.handler.TextWebSocketHandler;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.shinhan.zoomoney.stock.service.ApprovalKeyService;
+import com.shinhan.zoomoney.stock.service.RealTimePriceService;
 
 import reactor.core.publisher.Flux;
 

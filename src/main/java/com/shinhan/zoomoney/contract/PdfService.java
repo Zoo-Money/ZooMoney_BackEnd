@@ -53,7 +53,6 @@ public class PdfService {
 			Font titleFont = new Font(baseFont, 36, Font.BOLD);
 			Font contentFont = new Font(baseFont, 24, Font.NORMAL);
 
-
 			// "용돈 계약서" 제목을 가운데 정렬
 			Paragraph title = new Paragraph("용돈 계약서", titleFont);
 			title.setAlignment(Element.ALIGN_CENTER); // 제목 가운데 정렬 추가
@@ -76,7 +75,6 @@ public class PdfService {
 
 			// 추가 공백 (테이블과 계약 내용 사이 간격 추가)
 			document.add(new Paragraph("\n\n"));
-
 
 			// 부모 서명 & 자녀 서명을 한 줄에 추가 (테이블 사용)
 			PdfPTable table = new PdfPTable(2); // 2열 테이블 생성
@@ -107,7 +105,7 @@ public class PdfService {
 		} finally {
 			document.close();
 		}
-		 return fileName; // 파일명만 반환하도록 변경
+		return fileName; // 파일명만 반환하도록 변경
 
 	}
 }
