@@ -79,6 +79,7 @@ public class CardController {
 			@RequestParam("member_num") Integer memberNum) {
 		List<UseHistoryEntity> useHistoryList = useHistoryService.getHistoryByPeriod(period, memberNum);
 		return useHistoryList;
+		
 	}
 
 	@GetMapping("analysis")
