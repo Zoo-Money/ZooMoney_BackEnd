@@ -64,4 +64,14 @@ public class MemberController {
         List<MemberEntity> memberInfo = memberService.selectByMemberNum(memberNum);
         return memberInfo;
     }
+    
+    // 포인트 조회 api
+    @GetMapping("/point/{memberNum}")
+    public Map<String, Integer> getMemberPoint(@PathVariable("memberNum") int memberNum) {
+        Integer point = memberService.getMemberPoint(memberNum);
+        Map<String, Integer> response = new HashMap<>();
+        response.put("member_point", point);
+        return response;
+    }
+
 }
