@@ -103,11 +103,11 @@ public class QuizService {
 	}
 
 	// ✅ 퀴즈 제출 및 DB 저장
-	public boolean submitQuiz(QuizSubmitDto quizSubmitDto) {
+	public boolean submitQuiz(QuizSubmitDto quizSubmitDto, int memberNum) {
 		boolean isCorrect = quizSubmitDto.getCorrectAnswer().equalsIgnoreCase(quizSubmitDto.getUserAnswer());
-
-		// ✅ 테스트용 memberNum 고정
-		int memberNum = 8;
+//
+//		// ✅ 테스트용 memberNum 고정
+//		int memberNum = 8;
 
 		// ✅ 사용자 정보 조회
 		MemberEntity member = memberRepository.findById(memberNum)
