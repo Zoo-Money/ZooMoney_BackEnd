@@ -18,12 +18,12 @@ import jakarta.servlet.http.HttpSession;
 @RequestMapping("/member")
 public class MemberController {
 
-	
     @Autowired
     private MemberService memberService;
 
     @PostMapping("/login")
-    public Map<String, Object> login(@RequestParam("member_id") String member_id, @RequestParam("member_pw") String member_pw, HttpSession session) {
+    public Map<String, Object> login(@RequestParam("member_id") String member_id,
+            @RequestParam("member_pw") String member_pw, HttpSession session) {
         MemberEntity member = memberService.login(member_id, member_pw);
         Map<String, Object> response = new HashMap<>();
         if (member != null) {
@@ -49,7 +49,7 @@ public class MemberController {
         }
         return response;
     }
-    
+
     @GetMapping("/logout")
     public Map<String, String> logout(HttpSession session) {
         session.invalidate(); // 세션 무효화
@@ -58,13 +58,12 @@ public class MemberController {
         return response;
     }
 
-
     @GetMapping("/select")
-	public List<MemberEntity> select(@RequestParam("memberNum") int memberNum) {
+    public List<MemberEntity> select(@RequestParam("memberNum") int memberNum) {
         List<MemberEntity> memberInfo = memberService.selectByMemberNum(memberNum);
         return memberInfo;
     }
-    
+
     // 포인트 조회 api
     @GetMapping("/point/{memberNum}")
     public Map<String, Integer> getMemberPoint(@PathVariable("memberNum") int memberNum) {

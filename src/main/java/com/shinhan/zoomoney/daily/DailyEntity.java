@@ -21,7 +21,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Builder
 @Entity
-@Table(name="Daily")
+@Table(name = "Daily")
 public class DailyEntity {
 
     @Id
