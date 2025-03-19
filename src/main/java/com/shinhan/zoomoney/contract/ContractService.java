@@ -64,14 +64,12 @@ public class ContractService {
 	
 	// 자녀가 서명 후 최종 계약서 생성 (PDF 생성)
 	public String completeContract(int childNum, String childSignature) {
-//		System.out.println("✅ 전달받은 childNum: " + childNum);
+//		System.out.println(" 전달받은 childNum: " + childNum);
 
 		ContractEntity contract = contractRepository
 				.findFirstByMember_MemberNumAndContractStatusOrderByContractNumDesc(childNum, false)
 				.orElseThrow(() -> new RuntimeException("계약서를 찾을 수 없습니다."));
 
-//		System.out.println("✅ 조회된 계약서: " + contract);
-//		System.out.println("✅ 서비스 [completeContract] 계약 내용: " + contract.getContractContent());
 
 		// 자녀정보 조회
 		MemberEntity child = memberRepository.findById(childNum)
