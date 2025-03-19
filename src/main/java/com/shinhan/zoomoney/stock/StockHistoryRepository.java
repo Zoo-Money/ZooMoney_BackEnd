@@ -15,13 +15,14 @@ public interface StockHistoryRepository extends JpaRepository<StockHistoryEntity
 	void deleteByMember(MemberEntity member);
 	
 	// 주식 매도 매입한 금액 계산
-	 @Query("SELECT SUM(sh.stockhistAmount) FROM StockHistoryEntity sh " +
-	           "WHERE sh.member.memberNum = :memberNum " +
-	           "AND sh.stock.stockNum = :stockNum " +
-	           "AND sh.stockhistType = :type")
-	    Integer getTotalStockAmount(@Param("memberNum") int memberNum, 
-	                                @Param("stockNum") int stockNum, 
-	                                @Param("type") String type);
+	@Query("SELECT SUM(sh.stockhistAmount) FROM StockHistoryEntity sh " +
+		       "WHERE sh.member.memberNum = :memberNum " +
+		       "AND sh.stock.stockId = :stockId " +
+		       "AND sh.stockhistType = :type")
+		Integer getTotalStockAmount(@Param("memberNum") int memberNum, 
+		                            @Param("stockId") String stockId, 
+		                            @Param("type") String type);
+
 	 
 	// 특정 회원이 보유한 주식별 개수, 평균 매수가격, 총 가치 조회
 	    @Query("SELECT sh.stock.stockName, " +

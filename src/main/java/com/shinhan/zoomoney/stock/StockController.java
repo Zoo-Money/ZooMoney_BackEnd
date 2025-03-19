@@ -40,7 +40,8 @@ public class StockController {
 	@PostMapping("/sell")
 	public ResponseEntity<String> sellStock(
 			@RequestBody SellDto sellDto){
-		String result = stockService.sellStock(sellDto.memberNum, sellDto.stockNum, sellDto.amount, sellDto.price);
+		String result = stockService.sellStock(sellDto.memberNum, sellDto.stockId, sellDto.amount, sellDto.price);
+		System.out.println("Received Sell Request: " + sellDto);
 		return ResponseEntity.ok(result);
 	}
 	
@@ -81,7 +82,7 @@ class BuyDto {
 @Data
 class SellDto {
 	int memberNum;
-	int stockNum;
+	String stockId;
 	int amount;
 	int price;
 }
