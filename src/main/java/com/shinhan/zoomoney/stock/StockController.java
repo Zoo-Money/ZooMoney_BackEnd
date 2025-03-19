@@ -55,12 +55,11 @@ public class StockController {
 	}
 
 	@PostMapping("/userStatus")
-	public ResponseEntity<Boolean> checkChildNum(@RequestBody StockMoneyDto stockMoneyDto) {
+	public ResponseEntity<Integer> checkChildNum(@RequestBody StockMoneyDto stockMoneyDto) {
 		int memberNum = stockMoneyDto.getMemberNum();
-		System.out.println(memberNum);
 		boolean exists = stockMoneyService.hasMemberNumCheck(memberNum);
-		System.out.println(exists);
-		return ResponseEntity.ok(exists);
+		int resultCode = exists ? 1 : 0;
+		return ResponseEntity.ok(resultCode);
 	}
 
 	
@@ -68,7 +67,6 @@ public class StockController {
 	@PostMapping("/start")
 	public ResponseEntity<String> startStock(@RequestBody StockMoneyDto stockMoneyDto){
 		int memberNum = stockMoneyDto.getMemberNum();
-		System.out.println(memberNum);
 		try {
             String result = stockService.resetStockMoney(memberNum);
             return ResponseEntity.ok(result);
