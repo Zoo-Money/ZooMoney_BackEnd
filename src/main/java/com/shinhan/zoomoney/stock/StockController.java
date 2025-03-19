@@ -1,23 +1,22 @@
 package com.shinhan.zoomoney.stock;
-
-import java.util.Enumeration;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
-import com.shinhan.zoomoney.member.MemberEntity;
-import com.shinhan.zoomoney.member.MemberRepository;
-import com.shinhan.zoomoney.member.MemberService;
-
-import jakarta.servlet.http.HttpSession;
-
+import lombok.Data;
 @RestController
 @RequestMapping("/stock")
+@CrossOrigin(origins = "http://localhost:3000")
 public class StockController {
 	private final StockService stockService;
-
 	@Autowired
 	StockMoneyService stockMoneyService;
 	
@@ -25,25 +24,23 @@ public class StockController {
 		this.stockService = stockService;
 	}
 	
-	// 매도
+	// 매수
 	@PostMapping("/buy")
-	public ResponseEntity<String> buyStock(
-			@RequestParam(name="memberNum") int memberNum,
-			@RequestParam(name="stockNum") int stockNum,
-			@RequestParam(name="amount") int amount,
-			@RequestParam(name="price") int price){
-		String result = stockService.buyStock(memberNum, stockNum, amount, price);
+	public ResponseEntity<String> buyStock(@RequestBody BuyDto buyDto){
+		System.out.println(buyDto);
+		String result = stockService.buyStock(buyDto.memberNum, buyDto.stockId,
+				buyDto.amount,buyDto.price);
 		return ResponseEntity.ok(result);
 	}
 	
-	// 매수
+	
+	
+	// 매도
 	@PostMapping("/sell")
 	public ResponseEntity<String> sellStock(
-			@RequestParam(name="memberNum") int memberNum,
-			@RequestParam(name="stockNum") int stockNum,
-			@RequestParam(name="amount") int amount,
-			@RequestParam(name="price") int price){
-		String result = stockService.sellStock(memberNum, stockNum, amount, price);
+			@RequestBody SellDto sellDto){
+		String result = stockService.sellStock(sellDto.memberNum, sellDto.stockId, sellDto.amount, sellDto.price);
+		System.out.println("Received Sell Request: " + sellDto);
 		return ResponseEntity.ok(result);
 	}
 	
@@ -67,6 +64,7 @@ public class StockController {
 	@PostMapping("/start")
 	public ResponseEntity<String> startStock(@RequestBody StockMoneyDto stockMoneyDto){
 		int memberNum = stockMoneyDto.getMemberNum();
+		
 		try {
             String result = stockService.resetStockMoney(memberNum);
             return ResponseEntity.ok(result);
@@ -81,4 +79,19 @@ public class StockController {
 		List<OwnedStockDto> result = stockService.getOwnedStocksByMember(memberNum);
 		return ResponseEntity.ok(result);
 	}
+}
+@Data
+class BuyDto {
+	int memberNum;
+	String stockId;
+	int amount;
+	int price;
+}
+
+@Data
+class SellDto {
+	int memberNum;
+	String stockId;
+	int amount;
+	int price;
 }
