@@ -8,6 +8,5 @@ import lombok.*;
 @Builder
 @ToString
 public class StockMoneyDto {
-    private int child_num;
-    private int stockmoney_total;
+    private int memberNum;
 }

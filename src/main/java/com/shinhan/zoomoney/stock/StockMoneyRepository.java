@@ -22,4 +22,6 @@ public interface StockMoneyRepository extends JpaRepository<StockMoneyEntity,Int
 	
 	// 특정 회원의 잔고 존재 여부 확인
 	//boolean existsByMemberNum(int memberNum);
+
+	boolean existsByMember_MemberNum(int memberNum);
 }

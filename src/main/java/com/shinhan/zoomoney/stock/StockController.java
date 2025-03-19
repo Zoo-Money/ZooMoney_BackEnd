@@ -1,15 +1,11 @@
 package com.shinhan.zoomoney.stock;
 
+import java.util.Enumeration;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestHeader;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.shinhan.zoomoney.member.MemberEntity;
 import com.shinhan.zoomoney.member.MemberRepository;
@@ -21,6 +17,9 @@ import jakarta.servlet.http.HttpSession;
 @RequestMapping("/stock")
 public class StockController {
 	private final StockService stockService;
+
+	@Autowired
+	StockMoneyService stockMoneyService;
 	
 	public StockController(StockService stockService) {
 		this.stockService = stockService;
@@ -54,11 +53,22 @@ public class StockController {
 		stockService.chargeAllMembers();
 		return ResponseEntity.ok("모든 멤버에게 1000000원 충전 완료!");
 	}
-	
+
+	@PostMapping("/userStatus")
+	public ResponseEntity<Boolean> checkChildNum(@RequestBody StockMoneyDto stockMoneyDto) {
+		int memberNum = stockMoneyDto.getMemberNum();
+		System.out.println(memberNum);
+		boolean exists = stockMoneyService.hasMemberNumCheck(memberNum);
+		System.out.println(exists);
+		return ResponseEntity.ok(exists);
+	}
+
 	
 	// 주식 시작하기 버튼 클릭 -> StockMoney 테이블에 member와 StockMoney추가
 	@PostMapping("/start")
-	public ResponseEntity<String> startStock(@RequestParam("member_num") int memberNum){
+	public ResponseEntity<String> startStock(@RequestBody StockMoneyDto stockMoneyDto){
+		int memberNum = stockMoneyDto.getMemberNum();
+		System.out.println(memberNum);
 		try {
             String result = stockService.resetStockMoney(memberNum);
             return ResponseEntity.ok(result);
