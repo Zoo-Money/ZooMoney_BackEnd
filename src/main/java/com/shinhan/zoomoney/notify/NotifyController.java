@@ -34,7 +34,7 @@ public class NotifyController {
 
     // SSE 연결 설정 (클라이언트가 알림을 구독)
     @GetMapping(value = "/subscribe/{memberNum}", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
-    public SseEmitter subscribe(@PathVariable int memberNum) {
+    public SseEmitter subscribe(@PathVariable("memberNum") int memberNum) {
         SseEmitter emitter = new SseEmitter(TIMEOUT);
         emitterMap.put(memberNum, emitter);
 
@@ -73,25 +73,25 @@ public class NotifyController {
 
     // 사용자의 알림 목록 조회
     @GetMapping("/list/{memberNum}")
-    public List<NotifyDto> select(@PathVariable int memberNum) {
+    public List<NotifyDto> select(@PathVariable("memberNum") int memberNum) {
         return notifyService.select(memberNum);
     }
 
     // 알림 상세 조회
     @PostMapping("/select/{notifyNum}")
-    public NotifyDto selectById(@PathVariable int notifyNum) {
+    public NotifyDto selectById(@PathVariable("notifyNum") int notifyNum) {
         return notifyService.entityToDto(notifyService.selectById(notifyNum));
     }
 
     // 읽지 않은 알림 개수 조회
     @GetMapping("/unread/{memberNum}")
-    public int selectUnread(@PathVariable int memberNum) {
+    public int selectUnread(@PathVariable("memberNum") int memberNum) {
         return notifyService.selectUnread(memberNum);
     }
 
     // 알림 상태(읽음 여부) 변경
     @PutMapping("/check/{notifyNum}")
-    public void update(@PathVariable int notifyNum) {
+    public void update(@PathVariable("notifyNum") int notifyNum) {
         notifyService.update(notifyNum);
     }
 }
