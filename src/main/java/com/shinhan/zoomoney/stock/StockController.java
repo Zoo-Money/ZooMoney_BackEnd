@@ -79,7 +79,7 @@ public class StockController {
 	
 	// 보유한 주식 내역 조회
 	@GetMapping("/owned")
-	public ResponseEntity<List<OwnedStockDto>> getOWnedStock(@RequestParam("member_num")int memberNum){
+	public ResponseEntity<List<OwnedStockDto>> getOWnedStock(@RequestParam("memberNum")int memberNum){
 		List<OwnedStockDto> result = stockService.getOwnedStocksByMember(memberNum);
 		return ResponseEntity.ok(result);
 	}
