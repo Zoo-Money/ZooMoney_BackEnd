@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import lombok.RequiredArgsConstructor;
@@ -32,9 +33,9 @@ public class QuizController {
     
     // ✅ 퀴즈 제출 및 정답 여부 저장
     @PostMapping("/submit")
-    public ResponseEntity<?> submitQuiz(@RequestBody QuizSubmitDto quizSubmitDto) {
+    public ResponseEntity<?> submitQuiz(@RequestBody QuizSubmitDto quizSubmitDto, @RequestParam("memberNum") int memberNum) {
     	
-        int memberNum = 8; // 테스트용 고정값    	
+//        int memberNum = 8; // 테스트용 고정값    	
         
         // ✅ 퀴즈 data가 5개 이상이면 퀴즈 응시 불가능
         // true면 응시 불가
@@ -44,14 +45,14 @@ public class QuizController {
         }
     	
         // ✅ 퀴즈 제출 및 정답 여부 저장
-        boolean isCorrect = quizService.submitQuiz(quizSubmitDto);
+        boolean isCorrect = quizService.submitQuiz(quizSubmitDto, memberNum);
         return ResponseEntity.ok().body("{\"isCorrect\": " + isCorrect + "}");
     }
     
     // ✅ 오늘 푼 퀴즈 개수 확인 API
     @GetMapping("/count")
-    public ResponseEntity<?> getTodayQuizCount(){
-    	int memberNum = 8; // 테스트용 고정값
+    public ResponseEntity<?> getTodayQuizCount(@RequestParam("memberNum") int memberNum){
+//    	int memberNum = 8; // 테스트용 고정값
     	int quizCount = quizService.howManyQuiz(memberNum);
     	
     	return ResponseEntity.ok(Collections.singletonMap("quizCount", quizCount));
@@ -59,8 +60,8 @@ public class QuizController {
     
     // ✅ 오늘 맞은 퀴즈 개수 확인 API
     @GetMapping("/total")
-    public ResponseEntity<?> getCorrectAnswerCount(){
-    	int memberNum = 8; // 테스트용 고정값
+    public ResponseEntity<?> getCorrectAnswerCount(@RequestParam("memberNum") int memberNum){
+//    	int memberNum = 8; // 테스트용 고정값
     	int correctAnswerCount = quizService.howManyCorrectAnswer(memberNum);
     	
     	return ResponseEntity.ok(Collections.singletonMap("correctAnswerCount", correctAnswerCount));
@@ -68,8 +69,8 @@ public class QuizController {
     
     // ✅ 오늘 푼 퀴즈 정답 여부 리스트 가져오기
     @GetMapping("/answerlist")
-    public ResponseEntity<?> getTodayAnswerList() {
-        int memberNum = 8; // 테스트용 고정값
+    public ResponseEntity<?> getTodayAnswerList(@RequestParam("memberNum") int memberNum) {
+//        int memberNum = 8; // 테스트용 고정값
         List<Integer> answerList = quizService.todayAnswerList(memberNum);
 
         return ResponseEntity.ok(Collections.singletonMap("answerList", answerList));
