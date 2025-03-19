@@ -3,7 +3,6 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -14,7 +13,6 @@ import org.springframework.web.bind.annotation.RestController;
 import lombok.Data;
 @RestController
 @RequestMapping("/stock")
-@CrossOrigin(origins = "http://localhost:3000")
 public class StockController {
 	private final StockService stockService;
 	@Autowired
@@ -32,9 +30,7 @@ public class StockController {
 				buyDto.amount,buyDto.price);
 		return ResponseEntity.ok(result);
 	}
-	
-	
-	
+
 	// 매도
 	@PostMapping("/sell")
 	public ResponseEntity<String> sellStock(
@@ -59,7 +55,6 @@ public class StockController {
 		return ResponseEntity.ok(resultCode);
 	}
 
-	
 	// 주식 시작하기 버튼 클릭 -> StockMoney 테이블에 member와 StockMoney추가
 	@PostMapping("/start")
 	public ResponseEntity<String> startStock(@RequestBody StockMoneyDto stockMoneyDto){
