@@ -22,7 +22,6 @@ import reactor.core.publisher.Flux;
 @Component
 public class MyWebSocketHandler extends TextWebSocketHandler {
     private final Map<String, WebSocketSession> sessions = new ConcurrentHashMap<>();
-    private final Map<String, String> sessionStockMap = new ConcurrentHashMap<>(); // 세션별 종목 코드 저장
     private final ScheduledExecutorService executor = Executors.newScheduledThreadPool(1);
 
     @Value("${stock.api.key}")
@@ -44,10 +43,10 @@ public class MyWebSocketHandler extends TextWebSocketHandler {
         sessions.put(sessionKey, session);
         // 주기적으로 데이터 전송 (1초마다)
         executor.scheduleAtFixedRate(() -> {
-            // 세션의 tr_key를 기반으로 API 요청
+            // 세션의 tr_key(종목코드)를 기반으로 API 요청
             String trKey = (String) session.getAttributes().get("tr_key");
             if (trKey != null) {
-                Flux<String> stockData = fetchStockData(trKey); // tr_key 값으로 실시간 주식 데이터 요청
+                Flux<String> stockData = fetchStockData(trKey);
                 stockData.subscribe(this::sendToAll);
             } else {
                 System.err.println("tr_key가 세션에 없습니다.");
@@ -62,14 +61,13 @@ public class MyWebSocketHandler extends TextWebSocketHandler {
 
     @Override
     protected void handleTextMessage(WebSocketSession session, TextMessage message) throws Exception {
-        // 메시지에서 tr_key를 추출
         String payload = message.getPayload();
         ObjectMapper objectMapper = new ObjectMapper();
         Map<String, String> messageData = objectMapper.readValue(payload, Map.class);
         String trKey = messageData.get("symbol");
 
         if (trKey != null) {
-            session.getAttributes().put("tr_key", trKey); // 세션에 tr_key 저장
+            session.getAttributes().put("tr_key", trKey);
         } else {
             System.err.println("tr_key가 메시지에 없습니다.");
         }
@@ -86,7 +84,7 @@ public class MyWebSocketHandler extends TextWebSocketHandler {
         for (WebSocketSession session : sessions.values()) {
             if (session.isOpen()) {
                 try {
-                    synchronized (session) { // :작은_파란색_다이아몬드: 동기화하여 하나의 메시지씩 전송
+                    synchronized (session) {
                         session.sendMessage(new TextMessage(message));
                     }
                 } catch (IOException | IllegalStateException e) {
