@@ -29,7 +29,7 @@ public class StockService {
 
 	// 매수
 	@Transactional
-	public String buyStock(int memberNum, int stockNum, int amount, int price) {
+	public String buyStock(int memberNum, String stockId, int amount, int price) {
 
 		int totalPrice = amount * price;
 		StockMoneyEntity stockMoney = stockMoneyRepository.findById(memberNum).orElse(null);
@@ -43,7 +43,7 @@ public class StockService {
 		
 
 		// 매수한 주식 정보 가져오기
-		StockEntity stock = stockChartRepository.findById(stockNum).orElse(null);
+		StockEntity stock = stockChartRepository.findByStockId(stockId).orElse(null);
 		if (stock == null) {
 			return "해당 주식 정보를 찾을 수 없습니다.";
 		}
