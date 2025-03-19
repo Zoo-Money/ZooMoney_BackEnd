@@ -28,8 +28,8 @@ public interface StockHistoryRepository extends JpaRepository<StockHistoryEntity
 	@Query("SELECT s.stockName,s.stockId, " +
 		       "SUM(sh.stockhistAmount) AS totalAmount, " +
 		       "AVG(sh.stockhistPrice) AS avgPrice, " +
-		       "s.stockPrice, " +
-		       "MAX(sh.stockhistPrice) AS lastTradePrice " +
+		       "MAX(sh.stockhistPrice) AS lastTradePrice, " +
+		       "s.stockPrice " +
 		       "FROM StockHistoryEntity sh " +
 		       "JOIN sh.stock s " +
 		       "WHERE sh.member.memberNum = :memberNum " +
