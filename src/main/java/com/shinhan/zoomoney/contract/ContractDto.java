@@ -4,7 +4,6 @@ import java.time.LocalDate;
 
 import lombok.*;
 
-
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -24,5 +23,5 @@ public class ContractDto {
     private String contract_excelpath;
 
     // ✅ 추가된 부모 서명 필드
-    //private String parentSignature;  // Base64 인코딩된 서명 이미지 데이터
+    // private String parentSignature; // Base64 인코딩된 서명 이미지 데이터
 }
