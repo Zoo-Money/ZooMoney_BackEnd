@@ -3,6 +3,8 @@
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -17,7 +19,7 @@ public interface ContractRepository extends JpaRepository<ContractEntity, Intege
 //	// 자녀의 ID로 초안 상태인 계약서 조회 (contract_status = false)
     Optional<ContractEntity> findFirstByMember_MemberNumAndContractStatus(int memberNum, boolean contractStatus);
 //	//Optional<ContractEntity> findFirstByMember_MemberNumAndContractStatus(Integer memberNum, Boolean contractStatus);
-//    
+    
     Optional<ContractEntity> findFirstByMember_MemberNumOrderByContractNumDesc(Integer memberNum);//종현
     
     // 가장 최근 계약서 조회 (계약 상태가 true인 경우)
@@ -27,23 +29,9 @@ public interface ContractRepository extends JpaRepository<ContractEntity, Intege
     // 과거 계약서 목록 조회
     List<ContractEntity> findAllByMember_MemberNumAndContractStatusOrderByContractDateDesc(int childNum, boolean contractStatus);    
     
-//    // ✅ 현재 유효한 계약서 조회 (계약 상태가 true인 경우)
-//    //Optional<ContractEntity> findFirstByMember_MemberNumAndContractStatus(int childNum, boolean contractStatus);
-//
-//    // ✅ 특정 계약서 ID로 조회
-//    Optional<ContractEntity> findById(int contractNum);
-//
-//    // ✅ 특정 부모의 모든 계약서 조회
-//    List<ContractEntity> findAllByMember_MemberNum(int parentId);
-//
-//    // ✅ 과거 계약서 목록 조회 (계약 상태가 false인 경우)
-//    List<ContractEntity> findAllByMember_MemberNumAndContractStatus(int parentId, boolean contractStatus);
-//
-//    // ✅ 특정 부모 + 특정 자녀의 유효한 계약서 조회 (만약 특정 아이만 필터링할 경우)
-//    @Query("SELECT c FROM ContractEntity c WHERE c.member.memberNum = :parentId AND c.contractContent LIKE %:childName% AND c.contractStatus = true")
-//    Optional<ContractEntity> findValidContractByChildName(@Param("parentId") int parentId, @Param("childName") String childName);
-
-	
+    // 최근 6개의 계약서 조회 (JPA 메서드 명 규칙 사용)
+    Page<ContractEntity> findByMember_MemberNumOrderByContractNumDesc(int childNum, Pageable pageable);
+    
     
 }
 
