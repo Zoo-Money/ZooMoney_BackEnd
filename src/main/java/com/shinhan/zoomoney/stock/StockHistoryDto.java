@@ -2,7 +2,7 @@ package com.shinhan.zoomoney.stock;
 
 import lombok.*;
 
-import java.sql.Date;
+import java.util.Date;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -11,10 +11,11 @@ import java.sql.Date;
 public class StockHistoryDto {
 
     private int stockhist_num;
-    private int child_num;
+    private int member_num;//child_num에서 member_num으로 수정
     private int stock_num;
     private String stockhist_type;
     private int stockhist_amount;
     private int stockhist_price;
-    private Date stockhist_date;
+    private Date stockhist_date;//util.date로 수정
+    private String stock_name;//stock_name 추가
 }
