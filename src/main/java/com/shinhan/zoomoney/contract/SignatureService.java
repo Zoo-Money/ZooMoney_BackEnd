@@ -10,13 +10,13 @@ import org.springframework.stereotype.Service;
 @Service
 public class SignatureService {
 
-	 // 서명 이미지를 로컬에 저장하는 메서드
+    // 서명 이미지를 로컬에 저장하는 메서드
     public String saveSignatureImage(String base64Signature, String fileName) {
         try {
             String base64Data = base64Signature.split(",")[1];
             byte[] decodedBytes = Base64.getDecoder().decode(base64Data);
 
-             // 서명 이미지 경로 설정
+            // 서명 이미지 경로 설정
             String filePath = "C:/signature_images/" + fileName + ".png";
 
             // 디렉토리 자동 생성 (경로 없을 시)
@@ -24,7 +24,7 @@ public class SignatureService {
             if (!dir.exists()) {
                 dir.mkdirs();
             }
-            //파일 저장
+            // 파일 저장
             File file = new File(filePath);
             try (OutputStream os = new FileOutputStream(file)) {
                 os.write(decodedBytes);

@@ -1,7 +1,5 @@
 package com.shinhan.zoomoney.contract;
 
-
-
 import java.time.LocalDate;
 
 import com.shinhan.zoomoney.member.MemberEntity;

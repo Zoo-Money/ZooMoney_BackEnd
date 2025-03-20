@@ -41,7 +41,7 @@ public class NotifyEntity {
     // Entity 기본값 설정
     @PrePersist
     public void prePersist() {
-        this.notifyTime = Timestamp.valueOf(LocalDateTime.now());  // 현재 시간
-        this.notifyCheck = false;  // 기본값 false
+        this.notifyTime = Timestamp.valueOf(LocalDateTime.now()); // 현재 시간
+        this.notifyCheck = false; // 기본값 false
     }
 }
