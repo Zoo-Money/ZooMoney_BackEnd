@@ -99,7 +99,7 @@ public class CardController {
 
 	// 카드 금액 변경
 	@PutMapping("/change/{memberNum}")
-	public void change(@PathVariable int memberNum, @RequestParam int amount) {
+	public void change(@PathVariable("memberNum") int memberNum, @RequestParam int amount) {
 		cardService.change(memberNum, amount);
 	}
 }
