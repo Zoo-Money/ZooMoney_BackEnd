@@ -147,7 +147,7 @@ public class ContractController {
 
 	@GetMapping("/contract/pdf/{fileName}")
 	@CrossOrigin(origins = "http://localhost:3000") // CORS 설정 추가
-	public ResponseEntity<Resource> getContractPdf(@PathVariable String fileName) {
+	public ResponseEntity<Resource> getContractPdf(@PathVariable("fileName") String fileName) {
 		System.out.println("@@@@파일이름은" + fileName);
 		try {
 			Path pdfPath = Paths.get("src/main/resources/contract_pdf/" + fileName);
