@@ -43,7 +43,8 @@ public class StockChartController {
                         null, // stockNum (자동 생성)
                         (String) stock.get("hts_kor_isnm"), // 주식 종목명
                         (String) stock.get("mksc_shrn_iscd"), // 주식 코드
-                        null // stock_info (추후 추가 가능)
+                        null, // stock_info (추후 추가 가능)
+                        0
                 ))
                 .toList();
 
@@ -77,5 +78,6 @@ public class StockChartController {
             return ResponseEntity.notFound().build();
         }
     }
-
+    
+   
 }

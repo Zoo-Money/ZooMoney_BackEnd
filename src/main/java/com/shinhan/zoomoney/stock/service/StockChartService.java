@@ -156,7 +156,8 @@ public class StockChartService {
                         null,
                         (String) stock.get("hts_kor_isnm"), // 주식 종목명
                         (String) stock.get("mksc_shrn_iscd"), // 주식 코드
-                        null // stock_info는 아직 없음
+                        null, // stock_info는 아직 없음
+                        0 // stock_price는 아직 없음
                 ))
                 .collect(Collectors.toList());
 
@@ -177,5 +178,6 @@ public class StockChartService {
         stockRepository.saveAll(updatedStockEntities);
         return updatedStockDtos;
     }
+    
 
 }

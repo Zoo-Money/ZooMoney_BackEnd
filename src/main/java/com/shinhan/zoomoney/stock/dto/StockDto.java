@@ -18,6 +18,7 @@ public class StockDto {
     private String stock_name;
     private String stock_id;
     private String stock_info;
+    private int stock_price;
 
     // StockDto -> StockEntity 변환
     public static StockEntity toEntity(StockDto dto) {
@@ -25,6 +26,7 @@ public class StockDto {
                 .stockName(dto.getStock_name())
                 .stockId(dto.getStock_id())
                 .stockInfo(dto.getStock_info())
+                .stockPrice(dto.stock_price)
                 .build();
     }
 
@@ -34,6 +36,7 @@ public class StockDto {
                 .stock_name(entity.getStockName())
                 .stock_id(entity.getStockId())
                 .stock_info(stockInfo)
+                .stock_price(entity.getStockPrice())
                 .build();
     }
 
