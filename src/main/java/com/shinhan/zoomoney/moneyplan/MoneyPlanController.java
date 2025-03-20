@@ -7,6 +7,7 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -28,10 +29,10 @@ public class MoneyPlanController {
 		return ResponseEntity.ok(allowance);
 	}
 
-	@PostMapping("/save")
+	@PostMapping("/save/{memberNum}")
 	public ResponseEntity<String> saveMoneyPlan(
 			@RequestBody Map<String, Object> requestData, // planMoney와 categoryAmounts를 받는 Map
-			HttpSession session) {
+			@PathVariable("memberNum") int memberNum) {
 		int planMoney = (Integer) requestData.get("planMoney"); // planMoney 추출
 
 		// categoryAmounts는 Map<String, String>으로 받아서 Map<Integer, Integer>로 변환
@@ -51,13 +52,13 @@ public class MoneyPlanController {
 		}
 
 		// 서비스 호출
-		moneyPlanService.saveMoneyPlan(session, planMoney, convertedCategoryAmounts);
+		moneyPlanService.saveMoneyPlan(memberNum, planMoney, convertedCategoryAmounts);
 
 		return ResponseEntity.ok("용돈계획 저장 완료");
 	}
 
-	@GetMapping("/select")
-	public List<MoneyPlanDto> getMoneyPlan(HttpSession session) {
-		return moneyPlanService.getMoneyPlan(session);
+	@GetMapping("/select/{memberNum}")
+	public List<MoneyPlanDto> getMoneyPlan(@PathVariable("memberNum") int memberNum) {
+		return moneyPlanService.getMoneyPlan(memberNum);
 	}
 }

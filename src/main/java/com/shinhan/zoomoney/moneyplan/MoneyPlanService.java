@@ -36,9 +36,6 @@ public class MoneyPlanService {
 	
 	@Autowired
 	CategoryRepository categoryRepo;
-	
-//	@Autowired
-//	PlanDetailService plandetailService;
 
 	//용돈계약서에서 지급 금액 가져오기
 	public int getAllowance(int memberNum) {
@@ -51,10 +48,7 @@ public class MoneyPlanService {
 	
 	//용돈 계획 테이블에 저장
 	@Transactional
-	public void saveMoneyPlan(HttpSession session, int planMoney, Map<Integer, Integer> categoryAmount) {
-		//memberNum 직접 주기
-		int memberNum = 1;
-		
+	public void saveMoneyPlan(int memberNum, int planMoney, Map<Integer, Integer> categoryAmount) {		
 		//memberNum으로 entity 찾기
 		MemberEntity member = memberRepo.findById(memberNum).orElse(null);
 		
@@ -74,9 +68,8 @@ public class MoneyPlanService {
 	}
 	
 	//용돈 계획 조회
-	public List<MoneyPlanDto> getMoneyPlan(HttpSession session){
-//		int memberNum = (Integer) session.getAttribute("memberNum");
-		int memberNum = 1;
+	public List<MoneyPlanDto> getMoneyPlan(int memberNum){
+		
 		List<MoneyPlanEntity> moneyPlans = moneyplanRepo.findByMember_MemberNum(memberNum);
 		List<MoneyPlanDto> moneyPlanDTOList = new ArrayList<>();
 		for(MoneyPlanEntity moneyPlan : moneyPlans) {
