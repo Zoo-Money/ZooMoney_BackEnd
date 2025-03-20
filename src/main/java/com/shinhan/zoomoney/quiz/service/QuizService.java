@@ -12,6 +12,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
 
 import com.fasterxml.jackson.databind.JsonNode;
@@ -108,12 +109,18 @@ public class QuizService {
 	}
 
 	// ✅ 퀴즈 제출 및 DB 저장
-	public boolean submitQuiz(QuizSubmitDto quizSubmitDto, int memberNum) {
+	@Transactional
+	public synchronized boolean submitQuiz(QuizSubmitDto quizSubmitDto, int memberNum) {
 		boolean isCorrect = quizSubmitDto.getCorrectAnswer().equalsIgnoreCase(quizSubmitDto.getUserAnswer());
-		//
-		// // ✅ 테스트용 memberNum 고정
-		// int memberNum = 8;
+		
+	    // 오늘 푼 퀴즈 개수 확인
+	    int todayQuizCount = quizRepository.countQuiz(memberNum);
 
+	    // 5개 이상이면 저장하지 않음
+	    if (todayQuizCount >= 5) {
+	        return false;
+	    }
+	    
 		// ✅ 사용자 정보 조회
 		MemberEntity member = memberRepository.findById(memberNum)
 				.orElseThrow(() -> new IllegalArgumentException("해당 회원을 찾을 수 없습니다."));
