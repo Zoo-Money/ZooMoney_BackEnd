@@ -26,7 +26,7 @@ public class StockInfoController {
     }
 
     @GetMapping("/detail/{infoNum}")
-    public StockInfoDto getStockContent(@PathVariable int infoNum) {
+    public StockInfoDto getStockContent(@PathVariable("infoNum") int infoNum) {
         StockInfoEntity InfoDetailList = stockInfoService.findByInfoNum(infoNum);
         ModelMapper mapper = new ModelMapper();
         StockInfoDto dto = mapper.map(InfoDetailList, StockInfoDto.class);
