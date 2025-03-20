@@ -59,11 +59,8 @@ public class MoneyPlanService {
 
 	// 용돈 계획 테이블에 저장
 	@Transactional
-	public void saveMoneyPlan(HttpSession session, int planMoney, Map<Integer, Integer> categoryAmount) {
-		// memberNum 직접 주기
-		int memberNum = 1;
-
-		// memberNum으로 entity 찾기
+	public void saveMoneyPlan(int memberNum, int planMoney, Map<Integer, Integer> categoryAmount) {		
+		//memberNum으로 entity 찾기
 		MemberEntity member = memberRepo.findById(memberNum).orElse(null);
 
 		// 용돈계획저장
@@ -83,10 +80,10 @@ public class MoneyPlanService {
 
 	}
 
-	// 용돈 계획 조회
-	public List<MoneyPlanDto> getMoneyPlan(HttpSession session) {
-		// int memberNum = (Integer) session.getAttribute("memberNum");
-		int memberNum = 1;
+	
+	//용돈 계획 조회
+	public List<MoneyPlanDto> getMoneyPlan(int memberNum){
+
 		List<MoneyPlanEntity> moneyPlans = moneyplanRepo.findByMember_MemberNum(memberNum);
 		List<MoneyPlanDto> moneyPlanDTOList = new ArrayList<>();
 		for (MoneyPlanEntity moneyPlan : moneyPlans) {

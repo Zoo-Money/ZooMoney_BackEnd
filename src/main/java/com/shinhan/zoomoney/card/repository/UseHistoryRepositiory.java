@@ -13,13 +13,13 @@ public interface UseHistoryRepositiory extends JpaRepository<UseHistoryEntity, I
         @Query("SELECT u FROM UseHistoryEntity u " +
                         "JOIN CardEntity c ON u.card.cardNum = c.cardNum " +
                         "JOIN MemberEntity m ON c.member.memberNum = m.memberNum " +
-                        "WHERE m.memberNum = :memberNum")
+                        "WHERE m.memberNum = :memberNum ORDER BY u.usehistDate DESC")
         List<UseHistoryEntity> findByMember(@Param("memberNum") Integer memberNum);
 
         @Query("SELECT u FROM UseHistoryEntity u " +
                         "JOIN CardEntity c ON u.card.cardNum = c.cardNum " +
                         "JOIN MemberEntity m ON c.member.memberNum = m.memberNum " +
-                        "WHERE m.memberNum = :memberNum and u.usehistDate >= :startDate")
+                        "WHERE m.memberNum = :memberNum and u.usehistDate >= :startDate ORDER BY u.usehistDate DESC")
         List<UseHistoryEntity> findByMemberAndPeriod(@Param("memberNum") Integer memberNum,
                         @Param("startDate") LocalDateTime startDate);
 
