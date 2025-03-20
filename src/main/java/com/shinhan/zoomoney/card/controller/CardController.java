@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -54,6 +55,10 @@ public class CardController {
 		// 해당 회원의 카드 목록 조회
 		CardEntity memberCards = cardService.getCardsByMemberNum(memberNum);
 
+		if (memberCards == null) {
+		    return ResponseEntity.noContent().build();
+		}
+
 		// 세션에 카드 정보 저장
 		session.setAttribute("tokenId", memberCards.getCardMetadata());
 		session.setAttribute("card_num", memberCards.getCardNum());
@@ -61,12 +66,12 @@ public class CardController {
 		session.setAttribute("card_metadata", memberCards.getCardMetadata());
 
 		return ResponseEntity.ok(memberCards);
+
 	}
 
 	// 카드 이미지 변경
 	@PutMapping("/update")
-	public ResponseEntity<String> updateCardDate(HttpSession session,
-			@RequestBody Map<String, Object> cardData) {
+	public ResponseEntity<String> updateCardDate(HttpSession session, @RequestBody Map<String, Object> cardData) {
 
 		Integer memberNum = Integer.parseInt((String) cardData.get("member_num"));
 		String cardNum = (String) cardData.get("card_num");
