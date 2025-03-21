@@ -81,6 +81,14 @@ public class StockController {
 		List<OwnedStockDto> result = stockService.getOwnedStocksByMember(memberNum);
 		return ResponseEntity.ok(result);
 	}
+	
+	// 보유한 예수금(현금) 조회
+	@GetMapping("/getmoney")
+	public ResponseEntity<Integer> getStockMoney(@RequestParam("memberNum") int memberNum){
+		int stockMoney = stockService.getStockMoney(memberNum);
+		
+		return ResponseEntity.ok(stockMoney);
+	}
 }
 
 @Data
