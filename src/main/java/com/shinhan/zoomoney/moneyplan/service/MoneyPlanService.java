@@ -84,7 +84,7 @@ public class MoneyPlanService {
 	//용돈 계획 조회
 	public List<MoneyPlanDto> getMoneyPlan(int memberNum){
 
-		List<MoneyPlanEntity> moneyPlans = moneyplanRepo.findByMember_MemberNum(memberNum);
+		List<MoneyPlanEntity> moneyPlans = moneyplanRepo.findByMember_MemberNumOrderByPlanNumAsc(memberNum);
 		List<MoneyPlanDto> moneyPlanDTOList = new ArrayList<>();
 		for (MoneyPlanEntity moneyPlan : moneyPlans) {
 			MoneyPlanDto moneyPlanDTO = MoneyPlanDto.builder()
@@ -99,6 +99,7 @@ public class MoneyPlanService {
 						.detail_num(planDetail.getDetailNum())
 						.category_num(planDetail.getCategory().getCategoryNum())
 						.detail_money(planDetail.getDetailMoney())
+						.plan_num(planDetail.getMoneyplan().getPlanNum())
 						.build();
 				planDetailDTOList.add(planDetailDTO);
 			}
