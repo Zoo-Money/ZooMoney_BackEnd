@@ -118,17 +118,16 @@ public class StockService {
 		List<Object[]> resultList = stockHistoryRepository.getOwnedStocks(memberNum);
 
 		return resultList.stream()
-				.map(obj -> new OwnedStockDto(
-						(String) obj[0], // stockName
-						(String) obj[1], // stockId
-
-						((Number) obj[2]).intValue(), // 보유 주식 수량
-						((Number) obj[3]).doubleValue(), // 평균 매수 가격
-						((Number) obj[2]).intValue() * ((Number) obj[4]).doubleValue(), // 총 가치 (보유량 * 현재 주가)
-						((Number) obj[4]).intValue(), // 현재 주가
-						((Number) obj[5]).intValue() // 최근 거래 가격
-				))
-				.collect(Collectors.toList());
+			    .map(obj -> new OwnedStockDto(
+			        (String) obj[0],                // stockName
+			        (String) obj[1],                // stockId
+			        ((Number) obj[2]).intValue(),   // 보유 주식 수량
+			        ((Number) obj[3]).doubleValue(),// 평균 매수가
+			        ((Number) obj[2]).intValue() * ((Number) obj[5]).doubleValue(), // 총 가치
+			        ((Number) obj[5]).intValue(),   // 현재가
+			        ((Number) obj[4]).intValue()    // 최근 거래가
+			    ))
+			    .collect(Collectors.toList());
 	}
 
 	// 모든 멤버에게 1000000원 충전

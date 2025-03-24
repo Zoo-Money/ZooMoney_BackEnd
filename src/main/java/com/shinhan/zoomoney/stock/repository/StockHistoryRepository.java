@@ -24,16 +24,17 @@ public interface StockHistoryRepository extends JpaRepository<StockHistoryEntity
 			@Param("type") String type);
 
 	// 특정 회원이 보유한 주식별 개수, 평균 매수가격, 총 가치 조회
-	@Query("SELECT s.stockName,s.stockId, " +
-			"SUM(sh.stockhistAmount) AS totalAmount, " +
-			"AVG(sh.stockhistPrice) AS avgPrice, " +
-			"MAX(sh.stockhistPrice) AS lastTradePrice, " +
-			"s.stockPrice " +
-			"FROM StockHistoryEntity sh " +
-			"JOIN sh.stock s " +
-			"WHERE sh.member.memberNum = :memberNum " +
-			"GROUP BY s.stockId, s.stockName, s.stockPrice")
-	List<Object[]> getOwnedStocks(@Param("memberNum") int memberNum);
+	@Query("SELECT s.stockName, s.stockId, " +
+		       "SUM(CASE WHEN sh.stockhistType = '1' THEN sh.stockhistAmount ELSE 0 END) - " +
+		       "SUM(CASE WHEN sh.stockhistType = '2' THEN sh.stockhistAmount ELSE 0 END) AS ownedAmount, " +
+		       "AVG(CASE WHEN sh.stockhistType = '1' THEN sh.stockhistPrice ELSE null END) AS avgBuyPrice, " +
+		       "MAX(sh.stockhistPrice) AS lastTradePrice, " +
+		       "s.stockPrice " +
+		       "FROM StockHistoryEntity sh " +
+		       "JOIN sh.stock s " +
+		       "WHERE sh.member.memberNum = :memberNum " +
+		       "GROUP BY s.stockId, s.stockName, s.stockPrice")
+		List<Object[]> getOwnedStocks(@Param("memberNum") int memberNum);
 
 	List<StockHistoryEntity> findByMember_MemberNum(int memberNum);
 

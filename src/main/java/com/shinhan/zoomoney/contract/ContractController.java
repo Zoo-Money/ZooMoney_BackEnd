@@ -81,7 +81,7 @@ public class ContractController {
 		}
 		CardEntity memberCards = cardService.getCardsByMemberNum(memberNum);
 		if (memberCards == null) {
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("해당 멤버의 카드 정보를 찾을 수 없습니다.");
+			memberCards = CardEntity.builder().cardMoney(0).build();
 		}
 		return ResponseEntity.ok(memberCards);
 	}
