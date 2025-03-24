@@ -1,7 +1,9 @@
 package com.shinhan.zoomoney.stock.service;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -115,19 +117,60 @@ public class StockService {
 	// 사용자의 보유 주식 정보 조회
 	@Transactional(readOnly = true)
 	public List<OwnedStockDto> getOwnedStocksByMember(int memberNum) {
-		List<Object[]> resultList = stockHistoryRepository.getOwnedStocks(memberNum);
+		// 1. 모든 히스토리를 시간순으로 불러오기
+	    List<StockHistoryEntity> allHistory = stockHistoryRepository.findAllByMemberNumOrderByDate(memberNum);
 
-		return resultList.stream()
-			    .map(obj -> new OwnedStockDto(
-			        (String) obj[0],                // stockName
-			        (String) obj[1],                // stockId
-			        ((Number) obj[2]).intValue(),   // 보유 주식 수량
-			        ((Number) obj[3]).doubleValue(),// 평균 매수가
-			        ((Number) obj[2]).intValue() * ((Number) obj[5]).doubleValue(), // 총 가치
-			        ((Number) obj[5]).intValue(),   // 현재가
-			        ((Number) obj[4]).intValue()    // 최근 거래가
-			    ))
-			    .collect(Collectors.toList());
+	    // 2. 종목별로 그룹핑
+	    Map<String, List<StockHistoryEntity>> grouped = allHistory.stream()
+	        .collect(Collectors.groupingBy(h -> h.getStock().getStockId()));
+
+	    List<OwnedStockDto> result = new ArrayList<>();
+
+	    for (String stockId : grouped.keySet()) {
+	        List<StockHistoryEntity> historyList = grouped.get(stockId);
+	        String stockName = historyList.get(0).getStock().getStockName();
+	        int currentPrice = historyList.get(0).getStock().getStockPrice();
+
+	        // 현재 보유 수량 및 평균 매입가 계산
+	        int ownedAmount = 0;
+	        int costSum = 0;
+
+	        for (StockHistoryEntity hist : historyList) {
+	            if ("1".equals(hist.getStockhistType())) { // 매수
+	                ownedAmount += hist.getStockhistAmount();
+	                costSum += hist.getStockhistAmount() * hist.getStockhistPrice();
+	            } else if ("2".equals(hist.getStockhistType())) { // 매도
+	                // 매도 수량만큼 원가 차감
+	                int sellAmount = hist.getStockhistAmount();
+
+	                while (sellAmount > 0 && ownedAmount > 0) {
+	                    // 가장 최근 매수 내역부터 차감 (단순화된 FIFO는 아님)
+	                    // 정확한 FIFO 원한다면 Queue 사용 필요
+	                    int reduce = Math.min(sellAmount, ownedAmount);
+	                    costSum -= reduce * hist.getStockhistPrice();  // 단순 처리
+	                    ownedAmount -= reduce;
+	                    sellAmount -= reduce;
+	                }
+	            }
+	        }
+
+	        if (ownedAmount <= 0) continue; // 보유 수량이 0 이하이면 추가하지 않음
+
+	        double avgPrice = (double) costSum / ownedAmount;
+	        int lastPrice = historyList.get(historyList.size() - 1).getStockhistPrice();
+
+	        result.add(new OwnedStockDto(
+	            stockName,
+	            stockId,
+	            ownedAmount,
+	            avgPrice,
+	            ownedAmount * currentPrice,
+	            currentPrice,
+	            lastPrice
+	        ));
+	    }
+
+	    return result;
 	}
 
 	// 모든 멤버에게 1000000원 충전

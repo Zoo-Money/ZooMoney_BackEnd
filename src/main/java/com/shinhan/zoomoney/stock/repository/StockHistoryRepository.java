@@ -37,5 +37,11 @@ public interface StockHistoryRepository extends JpaRepository<StockHistoryEntity
 		List<Object[]> getOwnedStocks(@Param("memberNum") int memberNum);
 
 	List<StockHistoryEntity> findByMember_MemberNum(int memberNum);
+	
+	// 모든 히스토리를 시간순으로 불러오기
+	@Query("SELECT sh FROM StockHistoryEntity sh WHERE sh.member.memberNum = :memberNum ORDER BY sh.stockHistDate ASC")
+	List<StockHistoryEntity> findAllByMemberNumOrderByDate(@Param("memberNum") int memberNum);
+
+
 
 }
