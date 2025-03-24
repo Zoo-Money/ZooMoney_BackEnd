@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.shinhan.zoomoney.stock.dto.StockHistoryBackupDto;
 import com.shinhan.zoomoney.stock.dto.StockHistoryDto;
 import com.shinhan.zoomoney.stock.service.StockHistoryService;
 
@@ -19,7 +20,7 @@ public class StockHistoryController {
 	StockHistoryService historyService;
 
 	@GetMapping("/list/{memberNum}")
-	public List<StockHistoryDto> selectAllHistory(@PathVariable("memberNum") int memberNum) {
+	public List<StockHistoryBackupDto> selectAllHistory(@PathVariable("memberNum") int memberNum) {
 		return historyService.selectStockHitory(memberNum);
 	}
 }

@@ -1,39 +1,40 @@
 package com.shinhan.zoomoney.stock.service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.shinhan.zoomoney.stock.dto.StockHistoryDto;
-import com.shinhan.zoomoney.stock.entity.StockHistoryEntity;
+import com.shinhan.zoomoney.stock.dto.StockHistoryBackupDto;
+import com.shinhan.zoomoney.stock.entity.StockHistoryBackupEntity;
 import com.shinhan.zoomoney.stock.repository.StockHistoryBackupRepository;
-import com.shinhan.zoomoney.stock.repository.StockHistoryRepository;
 
 @Service
 public class StockHistoryService {
 
 	@Autowired
 	StockHistoryBackupRepository stockHisBackUpRepo;
-
+	
 	// 시즌별 거래내역조회
-	public List<StockHistoryDto> selectStockHitory(Integer MemberNum) {
-		List<StockHistoryEntity> historyEntityList = stockHisBackUpRepo.findByMember_MemberNum(MemberNum);
-		List<StockHistoryDto> historyDTOList = historyEntityList.stream().map(entity -> EntityToDTO(entity)).toList();
-		return historyDTOList;
+	public List<StockHistoryBackupDto> selectStockHitory(Integer memberNum) {
+		List<StockHistoryBackupEntity> entityList = stockHisBackUpRepo.findByMember_MemberNum(memberNum);
+        return entityList.stream()
+                .map(this::entityToDto)
+                .collect(Collectors.toList());
 	}
 
 	// entity -> dto
-	public StockHistoryDto EntityToDTO(StockHistoryEntity entity) {
-		ModelMapper mapper = new ModelMapper();
-		StockHistoryDto dto = mapper.map(entity, StockHistoryDto.class);
-		dto.setMember_num(entity.getMember().getMemberNum());
-		dto.setStock_name(entity.getStock().getStockName());
-		dto.setStockhist_amount(entity.getStockhistAmount());
-		dto.setStockhist_date(entity.getStockHistDate());
-		dto.setStockhist_price(entity.getStockhistPrice());
-		dto.setStockhist_type(entity.getStockhistType());
-		return dto;
-	}
+	private StockHistoryBackupDto entityToDto(StockHistoryBackupEntity entity) {
+        return StockHistoryBackupDto.builder()
+                .stockhist_num(entity.getStockhistNum())
+                .child_num(entity.getMember().getMemberNum())
+                .stock_num(entity.getStockNum().getStockNum())
+                .stock_name(entity.getStockNum().getStockName())
+                .stockhist_type(entity.getStockhistType())
+                .stockhist_amount(entity.getStockhistAmount())
+                .stockhist_price(entity.getStockhistPrice())
+                .stockhist_date(new java.sql.Date(entity.getStockhistDate().getTime())) // util.Date -> sql.Date 변환
+                .build();
+    }
 }
