@@ -8,5 +8,5 @@ import com.shinhan.zoomoney.moneyplan.entity.MoneyPlanEntity;
 
 public interface MoneyPlanRepository extends JpaRepository<MoneyPlanEntity, Integer> {
 
-    List<MoneyPlanEntity> findByMember_MemberNum(int memberNum);
+    List<MoneyPlanEntity> findByMember_MemberNumOrderByPlanNumAsc(int memberNum);
 }
