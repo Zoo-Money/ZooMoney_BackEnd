@@ -7,6 +7,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -36,7 +37,14 @@ public class QuizService {
 	private final MemberRepository memberRepository;
 	private final KeywordRepository keywordRepository; // KeywordRepository 주입
 
-	private static final String GEMINI_API_URL = "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=AIzaSyDHayHZUvvzzIDA7gOYjIn4VIsZKQ5D9dE";
+	 @Value("${gemini.api.key}")
+	    private String geminiApiKey;
+
+	    private static final String GEMINI_API_URL_BASE = "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=";
+
+	    public String getGeminiApiUrl() {
+	        return GEMINI_API_URL_BASE + geminiApiKey;
+	    }
 
 	// ✅ AI에게 퀴즈 생성 요청 (DB에 저장 X)
 	public QuizResponseDto generateFinancialQuiz() {
@@ -72,7 +80,7 @@ public class QuizService {
 					+ " \"generationConfig\": { \"temperature\": 2.0, \"top_k\": 40, \"top_p\": 0.8 } }";
 
 			HttpEntity<String> entity = new HttpEntity<>(requestBody, headers);
-			ResponseEntity<String> response = restTemplate.exchange(GEMINI_API_URL, HttpMethod.POST, entity,
+			ResponseEntity<String> response = restTemplate.exchange(getGeminiApiUrl(), HttpMethod.POST, entity,
 					String.class);
 
 			// JSON이 아니라면 예외 발생 가능 → 예외 처리 추가
