@@ -165,8 +165,8 @@ public class StockService {
 	            ownedAmount,
 	            avgPrice,
 	            ownedAmount * currentPrice,
-	            currentPrice,
-	            lastPrice
+	            lastPrice,
+	            currentPrice
 	        ));
 	    }
 
