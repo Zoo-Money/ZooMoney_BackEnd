@@ -8,17 +8,18 @@ import org.springframework.stereotype.Service;
 
 import com.shinhan.zoomoney.stock.dto.StockHistoryDto;
 import com.shinhan.zoomoney.stock.entity.StockHistoryEntity;
+import com.shinhan.zoomoney.stock.repository.StockHistoryBackupRepository;
 import com.shinhan.zoomoney.stock.repository.StockHistoryRepository;
 
 @Service
 public class StockHistoryService {
 
 	@Autowired
-	StockHistoryRepository historyRepo;
+	StockHistoryBackupRepository stockHisBackUpRepo;
 
 	// 시즌별 거래내역조회
 	public List<StockHistoryDto> selectStockHitory(Integer MemberNum) {
-		List<StockHistoryEntity> historyEntityList = historyRepo.findByMember_MemberNum(MemberNum);
+		List<StockHistoryEntity> historyEntityList = stockHisBackUpRepo.findByMember_MemberNum(MemberNum);
 		List<StockHistoryDto> historyDTOList = historyEntityList.stream().map(entity -> EntityToDTO(entity)).toList();
 		return historyDTOList;
 	}
